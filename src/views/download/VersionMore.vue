@@ -1,48 +1,52 @@
 <template>
-  <div class="version-more-container">
-    <div class="version-header">
-      <h2>{{ version }} 详细信息</h2>
-      <div class="version-meta" v-if="versionData">
-        <span class="version-type" :class="versionData.type">
-          {{ getVersionTypeName(versionData.type) }}
-        </span>
-        <span class="version-date">{{ versionData.releaseTime }}</span>
-      </div>
-    </div>
-
-    <div class="version-content" v-if="versionData">
-      <div class="download-options">
-        <h3>下载选项</h3>
-        <div class="option-grid">
-          <div class="download-option">
-            <h4>原版客户端</h4>
-            <button class="download-btn" @click="startDownload('vanilla')">
-              下载客户端
-            </button>
-          </div>
-          <div class="download-option">
-            <h4>服务端</h4>
-            <button class="download-btn" @click="startDownload('server')">
-              下载服务端
-            </button>
+  <div class="page-container">
+    <transition name="content-transition" mode="out-in">
+      <div class="version-more-container">
+        <div class="version-header">
+          <h2>{{ version }} 详细信息</h2>
+          <div class="version-meta" v-if="versionData">
+            <span class="version-type" :class="versionData.type">
+              {{ getVersionTypeName(versionData.type) }}
+            </span>
+            <span class="version-date">{{ versionData.releaseTime }}</span>
           </div>
         </div>
+
+        <div class="version-content" v-if="versionData">
+          <div class="download-options">
+            <h3>下载选项</h3>
+            <div class="option-grid">
+              <div class="download-option">
+                <h4>原版客户端</h4>
+                <button class="download-btn" @click="startDownload('vanilla')">
+                  下载客户端
+                </button>
+              </div>
+              <div class="download-option">
+                <h4>服务端</h4>
+                <button class="download-btn" @click="startDownload('server')">
+                  下载服务端
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="loading" class="loading">
+          加载中...
+        </div>
+        <div v-if="error" class="error">
+          {{ error }}
+        </div>
+
+        <div class="back-section">
+          <button class="back-btn" @click="handleBack">
+            <span class="back-icon">←</span>
+            返回版本列表
+          </button>
+        </div>
       </div>
-    </div>
-
-    <div v-if="loading" class="loading">
-      加载中...
-    </div>
-    <div v-if="error" class="error">
-      {{ error }}
-    </div>
-
-    <div class="back-section">
-      <button class="back-btn" @click="handleBack">
-        <span class="back-icon">←</span>
-        返回版本列表
-      </button>
-    </div>
+    </transition>
   </div>
 </template>
 

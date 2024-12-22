@@ -33,6 +33,13 @@
         </div>
       </div>
     </transition>
+    <div class="search-container">
+      <input 
+        type="text" 
+        placeholder="搜索版本..." 
+        v-model="searchQuery"
+      >
+    </div>
   </div>
 </template>
 
@@ -249,5 +256,25 @@ onMounted(async () => {
   background: var(--surface-color);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.search-container {
+  position: relative;
+  width: 400px;
+}
+
+.search-container::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
 }
 </style> 
