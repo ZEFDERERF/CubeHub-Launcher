@@ -66,6 +66,7 @@
         </svg>
       </button>
     </div>
+    <div class="titlebar-color-layer"></div>
   </div>
 </template>
 
@@ -84,7 +85,7 @@ const currentThemeColor = ref('')
 const currentPath = computed(() => route.path)
 const logoUrl = ref(logo)
 
-// Props 定��
+// Props 定义
 const props = defineProps({
   theme: {
     type: Object,
@@ -105,9 +106,7 @@ const props = defineProps({
 // 导航函数
 const navigateTo = async (path) => {
   try {
-    if (currentPath.value === path) {
-      await router.go(0)
-    } else {
+    if (currentPath.value !== path) {
       await router.push(path)
     }
   } catch (err) {
@@ -231,6 +230,40 @@ onUnmounted(() => {
   --nav-hover-light: rgba(0, 0, 0, 0.1);
   --nav-active-light: rgba(0, 0, 0, 0.15);
 }
+
+/* 修改标题栏的过渡效果 */
+.titlebar {
+  /* 移除或修改原有的过渡效果 */
+  transition: all 0.2s ease;
+}
+
+.titlebar::after {
+  /* 确保背景颜色层的过渡效果与主题色同步 */
+  transition: all 0.2s ease;
+}
+
+/* 导航链接的过渡效果 */
+.nav-link {
+  transition: all 0.2s ease;
+}
+
+.nav-link.router-link-active {
+  transition: all 0.2s ease;
+}
+
+/* 确保所有使用主题色的元素都使用相同的过渡时间 */
+:root {
+  --transition-speed: 0.2s;
+}
+
+/* 使用CSS变量统一过渡时间 */
+.titlebar,
+.titlebar::after,
+.nav-link,
+.nav-link.router-link-active,
+.sidebar-btn.active {
+  transition: all var(--transition-speed) ease;
+}
 </style>
 
 <style scoped>
@@ -244,7 +277,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 100;
   user-select: none;
   color: white;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -252,26 +285,24 @@ onUnmounted(() => {
   border-radius: var(--window-border-radius, 8px) var(--window-border-radius, 8px) 0 0;
 }
 
-/* 背景层 */
-.titlebar::before {
+/* 修改阴影效果 */
+.titlebar::after {
   content: '';
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-image: var(--background-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 1;
-  z-index: -2;
-  transition: all 0.3s ease;
-  filter: brightness(1.1) contrast(1.1);
+  bottom: -10px;
+  height: 10px;
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 99;
 }
 
 /* 颜色层 */
-.titlebar::after {
+.titlebar-color-layer {
   content: '';
   position: absolute;
   top: 0;
@@ -282,12 +313,6 @@ onUnmounted(() => {
   opacity: 1;
   z-index: -1;
   backdrop-filter: blur(8px);
-}
-
-/* 确保内容在遮罩层之上 */
-.titlebar > * {
-  position: relative;
-  z-index: 1;
 }
 
 @keyframes slideDown {
