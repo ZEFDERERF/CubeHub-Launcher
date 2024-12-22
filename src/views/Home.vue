@@ -406,6 +406,12 @@
   opacity: 1;
 }
 
+/* 临时对其 */
+.login-button {
+  display: flex;
+  align-items: center;
+}
+
 .remove-account:hover {
   color: #ff4d4f;
   transform: scale(1.1);
