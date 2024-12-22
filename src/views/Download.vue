@@ -1,71 +1,95 @@
 <template>
-  <div class="download-container">
-    <DownloadProgress
-      v-if="isDownloading"
-      :version="currentDownload.version"
-      :isDownloading="isDownloading"
-      @cancel="cancelDownload"
-    />
-    <div class="top-section">
-      <div class="top-bar">
-        <nav class="version-nav">
-          <div class="version-tabs">
-            <button 
-              v-for="(count, type) in versionCounts" 
-              :key="type"
-              class="version-tab"
-              :class="{ active: currentCategory === type }"
-              @click="currentCategory = type"
-            >
-              {{ getTabName(type) }} ({{ count }})
-            </button>
-          </div>
-        </nav>
-        
-        <div class="search-bar">
-          <input 
-            v-model="searchQuery" 
-            type="text" 
-            placeholder="搜索版本..."
-            class="search-input"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="version-list-container" ref="versionListRef">
-      <div v-if="loading" class="loading">
-        正在加载版本列表...
-      </div>
-      <div v-else-if="error" class="error">
-        {{ error }}
-      </div>
-      <div v-else-if="filteredVersions.length === 0" class="no-results">
-        没有找到匹配的版本
-      </div>
-      <div v-else class="version-items">
-        <div v-for="version in filteredVersions" 
-             :key="version.id" 
-             class="version-item">
-          <div class="version-info">
-            <h3>{{ version.id }}</h3>
-            <div class="version-meta">
-              <span class="version-type" :class="version.type">
-                {{ getVersionTypeName(version.type) }}
-              </span>
-              <span class="version-date">{{ version.releaseTime }}</span>
+  <div class="page-container">
+    <div class="download-container">
+      <!-- 左侧版本切换侧边栏 -->
+      <nav class="version-sidebar">
+        <button 
+          v-for="(count, type) in versionCounts" 
+          :key="type"
+          class="version-nav-btn"
+          :class="{ active: currentCategory === type }"
+          @click="handleCategoryChange(type)"
+          :disabled="isAnimating"
+        >
+          <div class="btn-content">
+            <div class="icon-label">
+              <!-- 正式版图标 - 钻石图标代表稳定版本 -->
+              <svg v-if="type === 'release'" class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M18.9 6.5L12 2L5.1 6.5l2.5 7.9L12 19.8l4.4-5.4l2.5-7.9M12 4.3l4.5 2.9l-1.6 5l-2.9-.6l-2.9.6l-1.6-5L12 4.3m0 13.1l-2.6-3.2l2.6.6l2.6-.6l-2.6 3.2z"/>
+              </svg>
+              <!-- 预览版图标 - 实验室烧杯图标代表测试版本 -->
+              <svg v-else-if="type === 'snapshot'" class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M6,22A3,3 0 0,1 3,19C3,18.4 3.18,17.84 3.5,17.37L9,7.81V6A1,1 0 0,1 8,5V4A2,2 0 0,1 10,2H14A2,2 0 0,1 16,4V5A1,1 0 0,1 15,6V7.81L20.5,17.37C20.82,17.84 21,18.4 21,19A3,3 0 0,1 18,22H6M5,19A1,1 0 0,0 6,20H18A1,1 0 0,0 19,19C19,18.79 18.93,18.59 18.82,18.43L16.53,14.47L14,17L8.93,11.93L5.18,18.43C5.07,18.59 5,18.79 5,19M13,10A1,1 0 0,0 12,9A1,1 0 0,0 11,10A1,1 0 0,0 12,11A1,1 0 0,0 13,10Z"/>
+              </svg>
+              <!-- 远古版图标 - 化石图标代表老版本 -->
+              <svg v-else-if="type === 'old_alpha'" class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z M8.83,7.67C9.03,7.67 9.23,7.73 9.4,7.87L10.5,8.63L11.6,7.87C11.77,7.73 11.97,7.67 12.17,7.67A1,1 0 0,1 13.17,8.67C13.17,8.87 13.1,9.07 12.97,9.23L11.9,10.33L12.97,11.43C13.1,11.6 13.17,11.8 13.17,12A1,1 0 0,1 12.17,13C11.97,13 11.77,12.93 11.6,12.8L10.5,12.03L9.4,12.8C9.23,12.93 9.03,13 8.83,13A1,1 0 0,1 7.83,12C7.83,11.8 7.9,11.6 8.03,11.43L9.1,10.33L8.03,9.23C7.9,9.07 7.83,8.87 7.83,8.67A1,1 0 0,1 8.83,7.67Z"/>
+              </svg>
+              <!-- 愚人节版图标 - 笑脸图标代表趣味版本 -->
+              <svg v-else-if="type === 'april_fools'" class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23M15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11Z"/>
+              </svg>
+              <span class="version-label">{{ getTabName(type) }}</span>
             </div>
+            <span class="version-count">{{ count }}</span>
           </div>
-          <div class="version-actions">
-            <button class="download-btn" @click="startDownload(version.id, 'vanilla')">
-              下载
-            </button>
-            <router-link 
-              :to="`/download/${version.id}/more`"
-              class="more-btn"
+        </button>
+      </nav>
+
+      <!-- 主内容区域 -->
+      <div class="main-content">
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+          <div class="search-wrapper">
+            <input 
+              v-model="searchQuery" 
+              type="text" 
+              placeholder="搜索版本..."
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <!-- 版本列表 -->
+        <div class="version-list-container">
+          <div v-if="loading" class="loading">加载中...</div>
+          <div v-else-if="error" class="error">{{ error }}</div>
+          <div v-else-if="filteredVersions.length === 0" class="no-results">
+            没有找到匹配的版本
+          </div>
+          <div 
+            v-else 
+            class="version-list"
+          >
+            <div 
+              v-for="(version, index) in filteredVersions" 
+              :key="version.id"
+              class="version-item"
+              :class="{ selected: selectedVersion === version.id }"
+              :style="{ '--index': index }"
+              @click="handleVersionClick(version)"
             >
-              更多选项
-            </router-link>
+              <div class="version-id">{{ version.id }}</div>
+              <div class="version-info">
+                <span class="version-type">{{ getVersionTypeName(version.type) }}</span>
+                <span class="version-date">{{ version.releaseTime }}</span>
+              </div>
+              <div class="version-actions">
+                <button 
+                  class="download-btn" 
+                  @click.stop="startDownload(version.id, 'vanilla')"
+                >
+                  下载
+                </button>
+                <router-link 
+                  :to="`/download/${version.id}/more`" 
+                  class="more-btn"
+                  @click.stop
+                >
+                  更多选项
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -73,23 +97,403 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
-import { downloadManager } from '../services/DownloadManager'
-import DownloadProgress from '../components/DownloadProgress.vue'
+<style scoped>
+/* 基础布局 */
+.page-container {
+  height: 100%;
+  display: flex;
+}
 
+.download-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* 侧边栏样式 */
+.version-sidebar {
+  width: 200px;
+  background: var(--surface-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.05);
+  padding: 1rem 0;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  gap: 1rem;
+  background: var(--background-color);
+}
+
+/* 搜索栏 */
+.search-bar {
+  background: var(--surface-color);
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+/* 版本列表容器 */
+.version-list-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  height: calc(100vh - 160px);
+  position: relative;
+}
+
+.version-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  position: relative;
+  min-height: 200px;
+}
+
+/* 版本卡片基础样式 */
+.version-item {
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--theme-color-rgb), 0.1);
+  cursor: pointer;
+  margin-top: -4px;
+  will-change: transform, box-shadow, opacity;
+  animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: calc(var(--index) * 0.05s);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.3s ease;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* 卡片悬浮和选中效果 */
+.version-item:hover {
+  transform: translateX(-8px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(var(--theme-color-rgb), 0.15);
+  z-index: 2;
+}
+
+.version-item.selected {
+  transform: translateX(-16px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(var(--theme-color-rgb), 0.2);
+  border-color: var(--theme-color);
+  border-width: 2px;
+  z-index: 3;
+}
+
+.version-item.selected:hover {
+  transform: translateX(-20px) scale(1.04);
+  box-shadow: 0 16px 40px rgba(var(--theme-color-rgb), 0.25);
+}
+
+/* 版本信息样式 */
+.version-id {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--theme-color);
+  min-width: 100px;
+  transition: transform 0.3s ease;
+}
+
+.version-item.selected .version-id {
+  transform: scale(1.05);
+}
+
+.version-info {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.version-item.selected .version-info {
+  transform: translateX(4px);
+}
+
+.version-type {
+  padding: 0.25rem 0.75rem;
+  background: rgba(var(--theme-color-rgb), 0.1);
+  color: var(--theme-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.version-item.selected .version-type {
+  background: rgba(var(--theme-color-rgb), 0.2);
+}
+
+.version-date {
+  color: var(--secondary-text);
+  font-size: 0.9rem;
+}
+
+/* 按钮样式 */
+.version-actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0.8;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.version-item:hover .version-actions {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.version-item.selected .version-actions {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.download-btn,
+.more-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.download-btn {
+  background: var(--theme-color);
+  color: white;
+}
+
+.download-btn:hover {
+  filter: brightness(1.1);
+}
+
+.more-btn {
+  background: rgba(var(--theme-color-rgb), 0.1);
+  color: var(--theme-color);
+  text-decoration: none;
+}
+
+.more-btn:hover {
+  background: rgba(var(--theme-color-rgb), 0.15);
+}
+
+/* 侧边栏按钮样式 */
+.version-nav-btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.version-nav-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--theme-color);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.version-nav-btn:hover::before {
+  opacity: 0.1;
+}
+
+.version-nav-btn.active::before {
+  opacity: 1;
+}
+
+.version-nav-btn:hover {
+  transform: translateX(8px);
+}
+
+.version-nav-btn.active {
+  color: white;
+  transform: translateX(8px);
+}
+
+/* 按钮内容布局 */
+.btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.icon-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+/* 图标样式 */
+.nav-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.version-nav-btn:hover .nav-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.version-nav-btn.active .nav-icon {
+  transform: scale(1.2);
+  filter: brightness(1.2);
+}
+
+/* 版本标签和计数 */
+.version-label,
+.version-count {
+  position: relative;
+  z-index: 1;
+}
+
+.version-count {
+  background: rgba(var(--theme-color-rgb), 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.version-nav-btn.active .version-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 列表动画 */
+.version-list-enter-active,
+.version-list-leave-active {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: absolute;
+  width: 100%;
+}
+
+.version-list-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.version-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.version-list-move {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 滚动条样式 */
+.version-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.version-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.version-list-container::-webkit-scrollbar-thumb {
+  background: rgba(var(--theme-color-rgb), 0.2);
+  border-radius: 4px;
+}
+
+.version-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--theme-color-rgb), 0.3);
+}
+</style> 
+
+<script setup>
+import { ref, computed, nextTick } from 'vue'
+import { downloadManager } from '../services/DownloadManager'
+
+// 版本类型和计数
 const currentCategory = ref('release')
+const versionCounts = ref({
+  release: 91,
+  snapshot: 631,
+  old_alpha: 61,
+  april_fools: 8
+})
+
+// 搜索和版本表态
 const searchQuery = ref('')
 const versions = ref([])
 const loading = ref(true)
 const error = ref(null)
-const versionListRef = ref(null)
+
+// 下载状态
 const isDownloading = ref(false)
 const currentDownload = ref({
   version: '',
   type: ''
 })
+
+// 获取版本类型的显示名称
+const getTabName = (type) => {
+  const names = {
+    release: '正式版',
+    snapshot: '预览版',
+    old_alpha: '远古版',
+    april_fools: '愚人节版本'
+  }
+  return names[type]
+}
 
 // 获取版本类型的显示名称
 const getVersionTypeName = (type) => {
@@ -99,21 +503,55 @@ const getVersionTypeName = (type) => {
     pre_release: '预发布版',
     release_candidate: '候选版',
     old_alpha: '远古版本(Alpha)',
-    old_beta: '远古版本(Beta)'
+    old_beta: '远古版本(Beta)',
+    april_fools: '愚人节版本'
   }
   return typeNames[type] || type
 }
 
-const getTabName = (type) => {
-  const names = {
-    release: '正式版',
-    snapshot: '预览版',
-    old: '远古版本'
+// 修改版本匹配逻辑
+const isVersionMatch = (version) => {
+  const releaseDate = new Date(version.releaseTime)
+  const isAprilFools = releaseDate.getMonth() === 3 && releaseDate.getDate() === 1
+  
+  // 如果是愚人节版本，优先归类到愚人节分类
+  if (currentCategory.value === 'april_fools') {
+    return isAprilFools
   }
-  return names[type] || type
+  
+  // 如果是愚人节版本，在其他分类中不显示
+  if (isAprilFools) {
+    return false
+  }
+  
+  switch (currentCategory.value) {
+    case 'release':
+      return version.type === 'release'
+    case 'snapshot':
+      return version.type === 'snapshot' || 
+             version.type === 'pre_release' || 
+             version.type === 'release_candidate'
+    case 'old_alpha':
+      return version.type === 'old_alpha' || 
+             version.type === 'old_beta' ||
+             version.id.toLowerCase().startsWith('a') || 
+             version.id.toLowerCase().startsWith('b')
+    default:
+      return true
+  }
 }
 
-// 从 Mojang API 获取数据
+// 过滤版本列表
+const filteredVersions = computed(() => {
+  const filtered = versions.value
+    .filter(version => isVersionMatch(version))
+    .filter(version => 
+      version.id.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  return filtered
+})
+
+// 获取版本列表
 const fetchVersions = async () => {
   try {
     loading.value = true
@@ -121,8 +559,6 @@ const fetchVersions = async () => {
     if (!response.ok) throw new Error('Failed to fetch versions')
     
     const data = await response.json()
-    console.log('Fetched versions:', data.versions)
-    
     versions.value = data.versions.map(v => ({
       id: v.id,
       type: v.type,
@@ -130,7 +566,8 @@ const fetchVersions = async () => {
       url: v.url
     }))
     
-    console.log('Processed versions:', versions.value)
+    updateVersionCounts()
+    
   } catch (err) {
     error.value = '获取版本列表失败: ' + err.message
     console.error('Error fetching versions:', err)
@@ -139,503 +576,81 @@ const fetchVersions = async () => {
   }
 }
 
-// 计算版本数量
-const versionCounts = computed(() => {
-  const counts = { release: 0, snapshot: 0, old: 0 }
+// 更新版本计数逻辑
+const updateVersionCounts = () => {
+  const counts = {
+    release: 0,
+    snapshot: 0,
+    old_alpha: 0,
+    april_fools: 0
+  }
+  
   versions.value.forEach(version => {
-    const mainVersion = parseFloat(version.id.split('.')[0])
-    if (version.type === 'release' && mainVersion >= 1) {
+    const releaseDate = new Date(version.releaseTime)
+    const isAprilFools = releaseDate.getMonth() === 3 && releaseDate.getDate() === 1
+    
+    if (isAprilFools) {
+      counts.april_fools++
+      return // 愚人节版本只计入愚人节分类
+    }
+    
+    if (version.type === 'release') {
       counts.release++
-    } else if ((version.type === 'snapshot' || version.type === 'pre_release' || 
-               version.type === 'release_candidate') && mainVersion >= 1) {
+    } else if (version.type === 'snapshot' || 
+               version.type === 'pre_release' || 
+               version.type === 'release_candidate') {
       counts.snapshot++
-    } else if (mainVersion < 1 || version.type === 'old_alpha' || 
-               version.type === 'old_beta') {
-      counts.old++
+    } else if (version.type === 'old_alpha' || 
+               version.type === 'old_beta' ||
+               version.id.toLowerCase().startsWith('a') || 
+               version.id.toLowerCase().startsWith('b')) {
+      counts.old_alpha++
     }
   })
-  return counts
-})
-
-// 版本匹配逻辑
-const isVersionMatch = (version) => {
-  const mainVersion = parseFloat(version.id.split('.')[0])
   
-  switch (currentCategory.value) {
-    case 'release':
-      return version.type === 'release' && mainVersion >= 1
-    case 'snapshot':
-      return (version.type === 'snapshot' || 
-              version.type === 'pre_release' || 
-              version.type === 'release_candidate') && mainVersion >= 1
-    case 'old':
-      return mainVersion < 1 || 
-             version.type === 'old_alpha' || 
-             version.type === 'old_beta'
-    default:
-      return true
-  }
+  versionCounts.value = counts
 }
 
-// 过滤版本列表
-const filteredVersions = computed(() => {
-  const query = searchQuery.value.toLowerCase()
-  return versions.value.filter(version => 
-    version.id.toLowerCase().includes(query) && 
-    isVersionMatch(version)
-  )
-})
-
-// 滚动到顶部
-const scrollToTop = () => {
-  if (versionListRef.value) {
-    versionListRef.value.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
+// 开始下载
+const startDownload = (version, type) => {
+  isDownloading.value = true
+  currentDownload.value = { version, type }
+  downloadManager.startDownload(version, type)
 }
 
-// 监听分类和搜索变化
-watch([currentCategory, searchQuery], async () => {
-  await nextTick()
-  scrollToTop()
-})
+// 取消下载
+const cancelDownload = () => {
+  isDownloading.value = false
+  currentDownload.value = { version: '', type: '' }
+  downloadManager.cancelDownload()
+}
 
 // 初始化
-onMounted(async () => {
-  await fetchVersions()
-})
+fetchVersions()
 
-// 下载相关方法
-const startDownload = async (version, type) => {
-  try {
-    isDownloading.value = true
-    currentDownload.value = { version, type }
-    await downloadManager.downloadVersion(version, type)
-  } catch (error) {
-    console.error('下载失败:', error)
-  } finally {
-    isDownloading.value = false
+// 添加动画状态控制
+const isAnimating = ref(false)
+
+// 修改版本切换处理
+const handleCategoryChange = async (type) => {
+  if (currentCategory.value === type) return
+  currentCategory.value = type
+  
+  // 重置滚动位置
+  const container = document.querySelector('.version-list-container')
+  if (container) {
+    container.scrollTop = 0
   }
+  
+  // 触发重新动画
+  versions.value = [...versions.value]
 }
 
-const cancelDownload = () => {
-  downloadManager.cancelDownload(currentDownload.value.version)
-  isDownloading.value = false
+// 添加选中状态
+const selectedVersion = ref(null)
+
+// 修改版本点击处理
+const handleVersionClick = (version) => {
+  selectedVersion.value = version.id === selectedVersion.value ? null : version.id
 }
 </script>
-
-<style scoped>
-.download-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--background-color);
-  position: relative;
-}
-
-.top-section {
-  padding: 1.5rem;
-  padding-bottom: 0;
-}
-
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  background: rgba(128, 128, 128, 0.1);
-  border-radius: 12px;
-  padding: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  position: relative;
-}
-
-.version-nav {
-  display: flex;
-  gap: 8px;
-  width: fit-content;
-  animation: navSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-right: auto;
-}
-
-.version-tab {
-  padding: 0.75rem 1.25rem;
-  text-decoration: none;
-  color: var(--text-color);
-  font-size: 0.95rem;
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  background: transparent;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-}
-
-.version-tab:hover:not(.active) {
-  background: rgba(128, 128, 128, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.version-tab.active {
-  background: var(--theme-color);
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(var(--theme-color-rgb), 0.3);
-}
-
-.version-tab.active:hover {
-  background: var(--theme-color);
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--theme-color-rgb), 0.4);
-}
-
-.router-view-wrapper {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-}
-
-/* 动画相关样式 */
-.version-tab-enter-active,
-.version-tab-leave-active {
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-  will-change: opacity, transform;
-}
-
-.version-tab-enter-from,
-.version-tab-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.version-list-enter-active,
-.version-list-leave-active {
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-  will-change: opacity, transform;
-}
-
-.version-list-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.version-list-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-@keyframes containerFadeIn {
-  from { 
-    opacity: 0;
-    transform: translateZ(0);
-  }
-  to { 
-    opacity: 1;
-    transform: translateZ(0);
-  }
-}
-
-@keyframes navSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.version-list-container {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0 1.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-  background: var(--background-color);
-  scroll-behavior: smooth;
-  transform: translateZ(0);
-  perspective: 1000px;
-  backface-visibility: hidden;
-}
-
-/* 自定义滚动条样式 */
-.version-list-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.version-list-container::-webkit-scrollbar-track {
-  background: rgba(128, 128, 128, 0.05);
-  border-radius: 4px;
-  margin: 2px;
-}
-
-.version-list-container::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  min-height: 40px;
-}
-
-.version-list-container::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-
-.version-items {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-.version-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  min-width: 0;
-  background: var(--surface-color);
-  border-radius: 12px;
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
-  z-index: 1;
-  will-change: transform, opacity;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  animation: itemSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-}
-
-.version-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
-  background: var(--surface-color);
-}
-
-.version-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.version-info h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: var(--text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-display: swap;
-}
-
-.version-meta {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.version-type {
-  font-size: 0.8rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  text-transform: capitalize;
-  background: rgba(128, 128, 128, 0.15);
-  color: var(--text-color);
-}
-
-.version-type.release {
-  background: rgba(76, 175, 80, 0.15);
-  color: #4CAF50;
-}
-
-.version-type.snapshot {
-  background: rgba(255, 152, 0, 0.15);
-  color: #ff9800;
-}
-
-.version-type.old_alpha,
-.version-type.old_beta {
-  background: rgba(156, 39, 176, 0.15);
-  color: #9c27b0;
-}
-
-.version-type.pre_release,
-.version-type.release_candidate {
-  background: rgba(255, 152, 0, 0.15);
-  color: #ff9800;
-}
-
-.version-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: 1rem;
-  flex-shrink: 0;
-}
-
-.download-btn,
-.more-btn {
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-}
-
-.download-btn {
-  background: var(--theme-color);
-  color: white;
-}
-
-.more-btn {
-  background: rgba(128, 128, 128, 0.1);
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-.download-btn:hover {
-  filter: brightness(1.1);
-}
-
-.more-btn:hover {
-  background: rgba(128, 128, 128, 0.2);
-}
-
-.search-bar {
-  position: relative;
-  min-width: 300px;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  padding-left: 2.5rem;
-  background: var(--surface-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  color: var(--text-color);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  position: relative;
-  z-index: 1;
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: rgba(128, 128, 128, 0.1);
-  }
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--theme-color);
-  background: var(--surface-color);
-  box-shadow: 0 6px 20px rgba(var(--theme-color-rgb), 0.25);
-  transform: translateY(-1px);
-}
-
-.search-input::placeholder {
-  color: var(--secondary-text);
-}
-
-.search-bar::before {
-  content: '';
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  opacity: 0.5;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  width: 16px;
-  height: 16px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-.search-bar:focus-within::before {
-  opacity: 0.7;
-}
-
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .search-bar {
-    position: relative;
-    left: auto;
-    transform: none;
-    width: 100%;
-  }
-  
-  .version-nav {
-    margin-right: 0;
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* 调整加载和错误状态的阴影 */
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
-  color: var(--secondary-text);
-  background: var(--surface-color);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* 页面切换动画 */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-  will-change: opacity, transform;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-/* 添加版本标签的样式 */
-.version-tabs {
-  display: flex;
-  gap: 0.5rem;
-}
-</style> 
