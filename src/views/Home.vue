@@ -14,8 +14,8 @@
               <span class="account-type">{{ currentAccount.type === 'microsoft' ? '正版账号' : '离线账号' }}</span>
             </div>
             <button class="switch-account" @click="showAccountMenu = !showAccountMenu">
-              <svg class="icon" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M7 10l5 5 5-5H7z"/>
+              <svg class="icon" viewBox="0 0 24 24" fill="none">
+                <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
             
@@ -24,8 +24,8 @@
               <div class="menu-header">
                 <h3>切换账号</h3>
                 <button class="add-account" @click="showLoginModal = true">
-                  <svg class="icon" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                  <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                   添加账号
                 </button>
@@ -53,8 +53,8 @@
             </div>
           </div>
           <button v-else class="login-button" @click="showLoginModal = true">
-            <svg class="icon" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33A7.95 7.95 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.49-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/>
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M3.996.695L5.094 2.9l2.204 1.097l-2.204 1.097l-1.098 2.204L2.9 5.093L.695 3.996L2.9 2.9zM12 3c-.622 0-1.23.063-1.815.183l-.98.2l-.4-1.96l.98-.2A11 11 0 0 1 12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12c0-.885.105-1.746.303-2.573l.233-.972l1.945.466l-.233.973A9 9 0 1 0 12 3m2.512 5.934h2.004v2.004h-2.003zm-7.049 0h2.004v2.004H7.463zm2.447 4.252l.488.872a1.834 1.834 0 0 0 3.206 0l.488-.872l1.745.977l-.488.872a3.834 3.834 0 0 1-6.696 0l-.488-.872zm10.92 7.633l-1.568.78l1.569.782l.78 1.569l.782-1.57l1.569-.78l-1.57-.781l-.78-1.569z"/>
             </svg>
             登录账号
           </button>
@@ -66,6 +66,9 @@
           :disabled="!currentAccount"
           @click="launchGame"
         >
+          <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2m0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8s-8 3.58-8 8s3.58 8 8 8m1-8v4h-2v-4H8l4-4l4 4z"/>
+          </svg>
           启动游戏
         </button>
       </div>
@@ -74,13 +77,13 @@
     <!-- 主内容区域 -->
     <div class="main-content">
       <!-- 欢迎栏 -->
-      <div v-if="showWelcome" class="welcome-section">
+      <div v-if="homeSettings.showWelcome.value" class="welcome-section">
         <h1>欢迎回来{{ currentAccount ? '，' + currentAccount.username : '' }}！</h1>
         <p>准备好开始新的冒险了吗？</p>
       </div>
 
       <!-- 最近游戏栏 -->
-      <div v-if="showRecentGames" class="recent-games">
+      <div v-if="homeSettings.showRecentGames.value" class="recent-games">
         <h2>最近游戏</h2>
         <div class="game-list">
           <div v-for="game in recentGames" :key="game.id" class="game-card">
@@ -253,11 +256,15 @@
   width: 64px;
   height: 64px;
   position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--background-color);
 }
 
 .avatar {
   width: 100%;
   height: 100%;
+  object-fit: cover;
   image-rendering: pixelated;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -383,6 +390,7 @@
 .account-item .avatar {
   width: 40px;
   height: 40px;
+  object-fit: cover;
 }
 
 .account-item .account-details {
@@ -428,11 +436,21 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .launch-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.launch-button .icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 /* 登录模态框样式 */
@@ -769,10 +787,73 @@
   color: var(--text-color);
   font-size: 1.1rem;
 }
+
+.version-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.version-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--surface-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.version-button:hover {
+  transform: translateY(-2px);
+  background: rgba(var(--theme-color-rgb), 0.1);
+}
+
+.version-button .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+.home-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem;
+  position: relative;
+}
+
+/* 优化滚动条样式 */
+.home-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.home-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.home-content::-webkit-scrollbar-thumb {
+  background: rgba(var(--theme-color-rgb), 0.2);
+  border-radius: 4px;
+}
+
+.home-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--theme-color-rgb), 0.3);
+}
 </style>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, inject } from 'vue'
 import { accountService } from '../services/accountService'
 import Modal from '../components/Modal.vue'
 import LoginSelector from '../components/LoginSelector.vue'
@@ -790,32 +871,11 @@ const loginType = ref('')
 const showDeleteConfirm = ref(false)
 const accountToDelete = ref(null)
 
-// 主页设置状态
-const showWelcome = ref(true)
-const showRecentGames = ref(true)
+// 添加离线登录状态
+const showOfflineLogin = ref(false)
 
-// 从本地存储加载设置
-const loadSettings = () => {
-  const settings = localStorage.getItem('home-settings')
-  if (settings) {
-    const { welcome, recentGames } = JSON.parse(settings)
-    showWelcome.value = welcome
-    showRecentGames.value = recentGames
-  }
-}
-
-// 保存设置到本地存储
-const saveSettings = () => {
-  localStorage.setItem('home-settings', JSON.stringify({
-    welcome: showWelcome.value,
-    recentGames: showRecentGames.value
-  }))
-}
-
-// 监听设置变化
-watch([showWelcome, showRecentGames], () => {
-  saveSettings()
-})
+// 注入主页设置
+const homeSettings = inject('homeSettings')
 
 // 模拟最近游戏数据
 const recentGames = ref([
@@ -873,7 +933,7 @@ const closeLoginModal = () => {
 
 // 处理登录方式选择
 const handleLoginSelect = (type) => {
-  console.log('选择登录方式:', type) // 添加日志
+  console.log('选择登录方式:', type)
   loginType.value = type
   if (type === 'microsoft') {
     handleMicrosoftLogin()
@@ -882,7 +942,7 @@ const handleLoginSelect = (type) => {
 
 // 处理离线登录
 const handleOfflineLogin = async (username) => {
-  console.log('处理离线登录:', username) // 添加日志
+  console.log('处理离线登录:', username)
   try {
     await accountService.loginOffline(username)
     closeLoginModal()
@@ -920,19 +980,11 @@ const handleMicrosoftCode = async (code) => {
 
 // 初始化
 onMounted(() => {
-  loadSettings()
-  
   // 点击外部关闭账号菜单
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.account-section')) {
       showAccountMenu.value = false
     }
   })
-})
-
-// 导出设置给其他组件使用
-defineExpose({
-  showWelcome,
-  showRecentGames
 })
 </script> 

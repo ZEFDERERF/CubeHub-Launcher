@@ -13,21 +13,21 @@
         >
           <div class="btn-content">
             <div class="icon-label">
-              <!-- 正式版图标 - 钻石图标代表稳定版本 -->
-              <svg v-if="type === 'release'" class="nav-icon" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M18.9 6.5L12 2L5.1 6.5l2.5 7.9L12 19.8l4.4-5.4l2.5-7.9M12 4.3l4.5 2.9l-1.6 5l-2.9-.6l-2.9.6l-1.6-5L12 4.3m0 13.1l-2.6-3.2l2.6.6l2.6-.6l-2.6 3.2z"/>
+              <!-- 正式版图标 -->
+              <svg v-if="type === 'release'" class="nav-icon" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12m0-2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"/>
               </svg>
-              <!-- 预览版图标 - 实验室烧杯图标代表测试版本 -->
-              <svg v-else-if="type === 'snapshot'" class="nav-icon" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M6,22A3,3 0 0,1 3,19C3,18.4 3.18,17.84 3.5,17.37L9,7.81V6A1,1 0 0,1 8,5V4A2,2 0 0,1 10,2H14A2,2 0 0,1 16,4V5A1,1 0 0,1 15,6V7.81L20.5,17.37C20.82,17.84 21,18.4 21,19A3,3 0 0,1 18,22H6M5,19A1,1 0 0,0 6,20H18A1,1 0 0,0 19,19C19,18.79 18.93,18.59 18.82,18.43L16.53,14.47L14,17L8.93,11.93L5.18,18.43C5.07,18.59 5,18.79 5,19M13,10A1,1 0 0,0 12,9A1,1 0 0,0 11,10A1,1 0 0,0 12,11A1,1 0 0,0 13,10Z"/>
+              <!-- 预览版图标 -->
+              <svg v-else-if="type === 'snapshot'" class="nav-icon" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M9 16.42v3.049l3-1.8l3 1.8v-3.05A8 8 0 0 1 12 17a8 8 0 0 1-3-.581M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12"/>
               </svg>
-              <!-- 远古版图标 - 化石图标代表老版本 -->
-              <svg v-else-if="type === 'old_alpha'" class="nav-icon" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z M8.83,7.67C9.03,7.67 9.23,7.73 9.4,7.87L10.5,8.63L11.6,7.87C11.77,7.73 11.97,7.67 12.17,7.67A1,1 0 0,1 13.17,8.67C13.17,8.87 13.1,9.07 12.97,9.23L11.9,10.33L12.97,11.43C13.1,11.6 13.17,11.8 13.17,12A1,1 0 0,1 12.17,13C11.97,13 11.77,12.93 11.6,12.8L10.5,12.03L9.4,12.8C9.23,12.93 9.03,13 8.83,13A1,1 0 0,1 7.83,12C7.83,11.8 7.9,11.6 8.03,11.43L9.1,10.33L8.03,9.23C7.9,9.07 7.83,8.87 7.83,8.67A1,1 0 0,1 8.83,7.67Z"/>
+              <!-- 远古版图标 -->
+              <svg v-else-if="type === 'old_alpha'" class="nav-icon" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M20 3.107a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1zm-8.811 10.158L5 14.355v4.752h7.218zM19 5.107h-7.219l2.468 14H19zm-9.25 0H5v7.218l5.842-1.03z"/>
               </svg>
-              <!-- 愚人节版图标 - 笑脸图标代表趣味版本 -->
-              <svg v-else-if="type === 'april_fools'" class="nav-icon" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23M15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11Z"/>
+              <!-- 愚人节版图标 -->
+              <svg v-else-if="type === 'april_fools'" class="nav-icon" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-4-7h8a4 4 0 0 1-8 0m0-2a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"/>
               </svg>
               <span class="version-label">{{ getTabName(type) }}</span>
             </div>
@@ -52,7 +52,35 @@
 
         <!-- 版本列表 -->
         <div class="version-list-container">
-          <div v-if="loading" class="loading">加载中...</div>
+          <div v-if="loading" class="loading-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" class="loading-svg">
+              <path 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-dasharray="16" 
+                stroke-dashoffset="16" 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2" 
+                d="M12 3c4.97 0 9 4.03 9 9"
+              >
+                <animate 
+                  fill="freeze" 
+                  attributeName="stroke-dashoffset" 
+                  dur="0.2s" 
+                  values="16;0"
+                />
+                <animateTransform 
+                  attributeName="transform" 
+                  dur="1.5s" 
+                  repeatCount="indefinite" 
+                  type="rotate" 
+                  values="0 12 12;360 12 12"
+                />
+              </path>
+            </svg>
+            <span class="loading-text">正在加载版本列表...</span>
+          </div>
           <div v-else-if="error" class="error">{{ error }}</div>
           <div v-else-if="filteredVersions.length === 0" class="no-results">
             没有找到匹配的版本
@@ -97,8 +125,9 @@
   </div>
 </template>
 
-<style scoped>
-/* 基础布局 */
+<style lang="scss" scoped>
+$animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
+
 .page-container {
   height: 100%;
   display: flex;
@@ -110,7 +139,6 @@
   height: 100%;
 }
 
-/* 侧边栏样式 */
 .version-sidebar {
   width: 200px;
   background: var(--surface-color);
@@ -122,7 +150,6 @@
   padding: 1rem 0;
 }
 
-/* 主内容区域 */
 .main-content {
   flex: 1;
   display: flex;
@@ -132,7 +159,6 @@
   background: var(--background-color);
 }
 
-/* 搜索栏 */
 .search-bar {
   background: var(--surface-color);
   border-radius: 8px;
@@ -158,7 +184,6 @@
   transition: all 0.3s ease;
 }
 
-/* 版本列表容器 */
 .version-list-container {
   flex: 1;
   overflow-y: auto;
@@ -176,7 +201,6 @@
   min-height: 200px;
 }
 
-/* 版本卡片基础样式 */
 .version-item {
   background: var(--surface-color);
   border-radius: 12px;
@@ -190,10 +214,10 @@
   cursor: pointer;
   margin-top: -4px;
   will-change: transform, box-shadow, opacity;
-  animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation: slideIn 0.5s $animation-curve backwards;
   animation-delay: calc(var(--index) * 0.05s);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition: transform 0.5s $animation-curve,
+              box-shadow 0.5s $animation-curve,
               border-color 0.3s ease;
 }
 
@@ -208,7 +232,6 @@
   }
 }
 
-/* 卡片悬浮和选中效果 */
 .version-item:hover {
   transform: translateX(-8px) scale(1.02);
   box-shadow: 0 8px 24px rgba(var(--theme-color-rgb), 0.15);
@@ -228,7 +251,6 @@
   box-shadow: 0 16px 40px rgba(var(--theme-color-rgb), 0.25);
 }
 
-/* 版本信息样式 */
 .version-id {
   font-size: 1.1rem;
   font-weight: 500;
@@ -271,12 +293,11 @@
   font-size: 0.9rem;
 }
 
-/* 按钮样式 */
 .version-actions {
   display: flex;
   gap: 0.5rem;
   opacity: 0.8;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s $animation-curve;
 }
 
 .version-item:hover .version-actions {
@@ -319,7 +340,6 @@
   background: rgba(var(--theme-color-rgb), 0.15);
 }
 
-/* 侧边栏按钮样式 */
 .version-nav-btn {
   padding: 0.75rem 2rem;
   border: none;
@@ -332,47 +352,78 @@
   font-size: 0.95rem;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s $animation-curve;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--theme-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+
+  &:hover {
+    transform: translateX(8px);
+    
+    &::before {
+      opacity: 0.1;
+    }
+  }
+
+  &.active {
+    color: white;
+    transform: translateX(8px);
+    
+    &::before {
+      opacity: 1;
+    }
+
+    // 发光效果
+    box-shadow: 
+      0 0 20px rgba(var(--theme-color-rgb), 0.3),
+      0 0 40px rgba(var(--theme-color-rgb), 0.1),
+      inset 0 0 10px rgba(255, 255, 255, 0.2);
+    
+    // 内部光晕
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.2)
+      );
+      z-index: 1;
+      opacity: 0.5;
+    }
+
+    .version-count {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-icon {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    }
+  }
 }
 
-.version-nav-btn::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: var(--theme-color);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
-}
-
-.version-nav-btn:hover::before {
-  opacity: 0.1;
-}
-
-.version-nav-btn.active::before {
-  opacity: 1;
-}
-
-.version-nav-btn:hover {
-  transform: translateX(8px);
-}
-
-.version-nav-btn.active {
-  color: white;
-  transform: translateX(8px);
-}
-
-/* 按钮内容布局 */
 .btn-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .icon-label {
@@ -382,11 +433,10 @@
   flex: 1;
 }
 
-/* 图标样式 */
 .nav-icon {
   width: 1.25rem;
   height: 1.25rem;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s $animation-curve;
   flex-shrink: 0;
 }
 
@@ -399,7 +449,20 @@
   filter: brightness(1.2);
 }
 
-/* 版本标签和计数 */
+.version-label,
+.version-count {
+  position: relative;
+  z-index: 2;
+}
+
+.version-count {
+  background: rgba(var(--theme-color-rgb), 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
 .version-label,
 .version-count {
   position: relative;
@@ -417,10 +480,9 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* 列表动画 */
 .version-list-enter-active,
 .version-list-leave-active {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s $animation-curve;
   position: absolute;
   width: 100%;
 }
@@ -436,10 +498,9 @@
 }
 
 .version-list-move {
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.5s $animation-curve;
 }
 
-/* 滚动条样式 */
 .version-list-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -456,11 +517,80 @@
 .version-list-container::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--theme-color-rgb), 0.3);
 }
+
+/* 加载状态样式 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 2rem;
+  color: var(--theme-color);
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-svg {
+  color: var(--theme-color);
+  opacity: 0.8;
+  filter: drop-shadow(0 0 8px rgba(var(--theme-color-rgb), 0.3));
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* 错误状态样式 */
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #ff4d4f;
+  font-size: 1.1rem;
+  background: rgba(255, 77, 79, 0.1);
+  border-radius: 12px;
+  margin: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 无结果状态样式 */
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  background: rgba(var(--theme-color-rgb), 0.1);
+  border-radius: 12px;
+  margin: 2rem;
+  animation: fadeIn 0.3s ease;
+}
 </style> 
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
-import { downloadManager } from '../services/DownloadManager'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { downloadManager } from '../services/downloadManager'
 
 // 版本类型和计数
 const currentCategory = ref('release')

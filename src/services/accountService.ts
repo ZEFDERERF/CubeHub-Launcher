@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { Account, MicrosoftAuthResult } from '../types'
+import type { Account } from '../types'
 import { getRandomSkin } from '../utils/skinUtils'
 
 class AccountService {

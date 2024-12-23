@@ -9,11 +9,42 @@
     <div class="resize-handle bottom-left"></div>
     <div class="resize-handle bottom-right"></div>
     <div class="titlebar-left" data-tauri-drag-region>
-      <div class="titlebar-logo">
-        <img src="../assets/IMG/logo2.png" alt="CubeHub" />
-      </div>
-      <div class="titlebar-text">
-        CubeHub Launcher
+      <div class="title-section">
+        <h1>
+          CHL
+        </h1>
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path stroke-dasharray="64" stroke-dashoffset="64" d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z">
+              <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="64;0"/>
+            </path>
+            <path stroke-dasharray="8" stroke-dashoffset="8" d="M12 12h-5.5">
+              <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s" dur="0.2s" values="8;0"/>
+              <animateTransform attributeName="transform" begin="1.3s" dur="15s" repeatCount="indefinite" type="rotate" values="0 12 12;15 12 12;165 12 12;65 12 12;115 12 12;165 12 12;165 12 12;165 12 12;90 12 12;115 12 12;115 12 12;15 12 12;0 12 12"/>
+            </path>
+          </g>
+          <g fill="currentColor">
+            <path fill-opacity="0" d="M12 21C9.41 21 7.15 20.79 5.94 19L12 21L18.06 19C16.85 20.79 14.59 21 12 21Z">
+              <animate fill="freeze" attributeName="d" begin="0.6s" dur="0.4s" values="M12 21C9.41 21 7.15 20.79 5.94 19L12 21L18.06 19C16.85 20.79 14.59 21 12 21Z;M12 16C9.41 16 7.15 17.21 5.94 19L12 21L18.06 19C16.85 17.21 14.59 16 12 16Z"/>
+              <set fill="freeze" attributeName="fill-opacity" begin="0.6s" to="1"/>
+            </path>
+            <circle cx="7" cy="12" r="0" transform="rotate(15 12 12)">
+              <animate fill="freeze" attributeName="r" begin="0.9s" dur="0.2s" values="0;1"/>
+            </circle>
+            <circle cx="7" cy="12" r="0" transform="rotate(65 12 12)">
+              <animate fill="freeze" attributeName="r" begin="0.95s" dur="0.2s" values="0;1"/>
+            </circle>
+            <circle cx="7" cy="12" r="0" transform="rotate(115 12 12)">
+              <animate fill="freeze" attributeName="r" begin="1s" dur="0.2s" values="0;1"/>
+            </circle>
+            <circle cx="7" cy="12" r="0" transform="rotate(165 12 12)">
+              <animate fill="freeze" attributeName="r" begin="1.05s" dur="0.2s" values="0;1"/>
+            </circle>
+            <circle cx="12" cy="12" r="0">
+              <animate fill="freeze" attributeName="r" begin="1.3s" dur="0.2s" values="0;2"/>
+            </circle>
+          </g>
+        </svg>
       </div>
     </div>
 
@@ -24,7 +55,18 @@
           :class="{ 'router-link-active': currentPath === '/' }"
           @click="navigateTo('/')"
         >
-          <span class="nav-icon">⌂</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+            <path d="M9 22V12h6v10" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+          </svg>
           <span class="nav-text">开始</span>
         </a>
         <a 
@@ -32,7 +74,23 @@
           :class="{ 'router-link-active': currentPath.startsWith('/download') }"
           @click="navigateTo('/download')"
         >
-          <span class="nav-icon">↓</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+            <path d="M7 10l5 5 5-5" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+            <path d="M12 15V3" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+          </svg>
           <span class="nav-text">下载</span>
         </a>
         <a 
@@ -40,7 +98,18 @@
           :class="{ 'router-link-active': currentPath === '/settings' }"
           @click="navigateTo('/settings')"
         >
-          <span class="nav-icon">⚙</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"/>
+          </svg>
           <span class="nav-text">设置</span>
         </a>
       </nav>
@@ -73,7 +142,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import logo from '../assets/IMG/logo2.png'
 
 // 定义 emit
 const emit = defineEmits(['update-background'])
@@ -83,7 +151,6 @@ const router = useRouter()
 const isMaximized = ref(false)
 const currentThemeColor = ref('')
 const currentPath = computed(() => route.path)
-const logoUrl = ref(logo)
 
 // Props 定义
 const props = defineProps({
@@ -345,34 +412,6 @@ onUnmounted(() => {
   }
 }
 
-.titlebar-logo {
-  display: flex;
-  align-items: center;
-}
-
-.titlebar-logo img {
-  height: 32px;
-  width: auto;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-right: 4px;
-  animation: rotateLogo 1s ease-out;
-  filter: brightness(1.2) contrast(1.2) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-@keyframes rotateLogo {
-  from {
-    transform: rotate(-180deg) scale(0);
-  }
-  to {
-    transform: rotate(0) scale(1);
-  }
-}
-
-.titlebar-logo img:hover {
-  transform: scale(1.1) rotate(10deg);
-  filter: brightness(1.3) contrast(1.3) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-}
-
 .titlebar-text {
   font-size: 18px;
   font-weight: 500;
@@ -419,11 +458,10 @@ onUnmounted(() => {
 .nav-links {
   display: flex;
   gap: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 .nav-links:hover {
@@ -433,20 +471,22 @@ onUnmounted(() => {
 }
 
 .nav-link {
-  padding: 8px 32px;
+  padding: 6px 16px;
   text-decoration: none;
   color: white;
-  font-size: 15px;
-  border-radius: 8px;
+  font-size: 14px;
+  border-radius: 4px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 10px;
-  opacity: 0.95;
+  gap: 6px;
+  opacity: 0.85;
   position: relative;
   cursor: pointer;
   overflow: hidden;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  min-width: 90px;
+  justify-content: center;
 }
 
 .nav-link::before {
@@ -469,20 +509,20 @@ onUnmounted(() => {
 
 .nav-link:hover {
   opacity: 1;
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link.router-link-active {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   font-weight: 500;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nav-icon {
-  font-size: 17px;
-  opacity: 0.95;
+  width: 16px;
+  height: 16px;
   transition: all 0.3s ease;
 }
 
@@ -492,13 +532,13 @@ onUnmounted(() => {
 
 .nav-text {
   font-weight: 500;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   position: relative;
   transition: all 0.3s ease;
 }
 
 .nav-link:hover .nav-text {
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 .titlebar-controls {
@@ -666,5 +706,27 @@ onUnmounted(() => {
   width: 8px;
   height: 8px;
   cursor: se-resize;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-section h1 {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: white;
+  margin-left: 0.25rem;
 }
 </style> 

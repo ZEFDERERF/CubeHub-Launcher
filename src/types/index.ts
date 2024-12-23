@@ -42,7 +42,6 @@ export interface Account {
   accessToken?: string
   refreshToken?: string
   expiresAt?: string
-  skinPath?: string
   createdAt: string
 }
 
