@@ -1,104 +1,112 @@
 <template>
-  <div class="home-container">
-    <!-- 左侧快速启动面板 -->
-    <div class="quick-start-panel">
-      <div class="panel-content">
-        <div class="account-section">
-          <!-- 账号信息/登录按钮 -->
-          <div v-if="currentAccount" class="account-info">
-            <div class="avatar-container">
-              <img :src="currentAccount.avatar" class="avatar" />
-            </div>
-            <div class="account-details">
-              <span class="username">{{ currentAccount.username }}</span>
-              <span class="account-type">{{ currentAccount.type === 'microsoft' ? '正版账号' : '离线账号' }}</span>
-            </div>
-            <button class="switch-account" @click="showAccountMenu = !showAccountMenu">
-              <svg class="icon" viewBox="0 0 24 24" fill="none">
-                <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+	<div class="home-container">
+		<!-- 左侧快速启动面板 -->
+		<div class="quick-start-panel">
+			<div class="panel-content">
+				<div class="account-section">
+					<!-- 账号信息/登录按钮 -->
+					<div v-if="currentAccount" class="account-info">
+						<div class="avatar-container">
+							<img :src="currentAccount.avatar" class="avatar" />
+						</div>
+						<div class="account-details">
+							<span class="username">{{ currentAccount.username }}</span>
+							<span class="account-type">{{
+								currentAccount.type === 'microsoft' ? '正版账号' : '离线账号'
+							}}</span>
+						</div>
+						<button class="switch-account" @click="showAccountMenu = !showAccountMenu">
+							<svg class="icon" viewBox="0 0 24 24" fill="none">
+								<path
+									d="M7 10l5 5 5-5"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+						</button>
 
-            <!-- 账号切换菜单 -->
-            <div v-if="showAccountMenu" class="account-menu">
-              <div class="menu-header">
-                <h3>切换账号</h3>
-                <button class="add-account" @click="showLoginModal = true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                  添加账号
-                </button>
-              </div>
-              <div class="account-list">
-                <div
-                  v-for="account in accounts"
-                  :key="account.id"
-                  class="account-item"
-                  :class="{ active: currentAccount.id === account.id }"
-                  @click="switchAccount(account)"
-                >
-                  <img :src="account.avatar" class="avatar" />
-                  <div class="account-details">
-                    <span class="username">{{ account.username }}</span>
-                    <span class="account-type">{{ account.type === 'microsoft' ? '正版账号' : '离线账号' }}</span>
-                  </div>
-                  <button class="remove-account" @click.stop="removeAccount(account)">
-                    <svg class="icon" viewBox="0 0 24 24">
-                      <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button v-else class="login-button" @click="showLoginModal = true">
-            <svg class="icon" width="20" height="20" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M3.996.695L5.094 2.9l2.204 1.097l-2.204 1.097l-1.098 2.204L2.9 5.093L.695 3.996L2.9 2.9zM12 3c-.622 0-1.23.063-1.815.183l-.98.2l-.4-1.96l.98-.2A11 11 0 0 1 12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12c0-.885.105-1.746.303-2.573l.233-.972l1.945.466l-.233.973A9 9 0 1 0 12 3m2.512 5.934h2.004v2.004h-2.003zm-7.049 0h2.004v2.004H7.463zm2.447 4.252l.488.872a1.834 1.834 0 0 0 3.206 0l.488-.872l1.745.977l-.488.872a3.834 3.834 0 0 1-6.696 0l-.488-.872zm10.92 7.633l-1.568.78l1.569.782l.78 1.569l.782-1.57l1.569-.78l-1.57-.781l-.78-1.569z"/>
-            </svg>
-            登录账号
-          </button>
-        </div>
+						<!-- 账号切换菜单 -->
+						<div v-if="showAccountMenu" class="account-menu">
+							<div class="menu-header">
+								<h3>切换账号</h3>
+								<button class="add-account" @click="showLoginModal = true">
+									<svg class="icon" viewBox="0 0 24 24" fill="none">
+										<path
+											d="M12 5v14m-7-7h14"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+										/>
+									</svg>
+									添加账号
+								</button>
+							</div>
+							<div class="account-list">
+								<div
+									v-for="account in accounts"
+									:key="account.id"
+									class="account-item"
+									:class="{ active: currentAccount.id === account.id }"
+									@click="switchAccount(account)"
+								>
+									<img :src="account.avatar" class="avatar" />
+									<div class="account-details">
+										<span class="username">{{ account.username }}</span>
+										<span class="account-type">{{
+											account.type === 'microsoft' ? '正版账号' : '离线账号'
+										}}</span>
+									</div>
+									<button
+										class="remove-account"
+										@click.stop="removeAccount(account)"
+									>
+										<svg class="icon" viewBox="0 0 24 24">
+											<path
+												fill="currentColor"
+												d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+											/>
+										</svg>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<button v-else class="login-button" @click="showLoginModal = true">
+						<svg class="icon" width="20" height="20" viewBox="0 0 24 24">
+							<path
+								fill="currentColor"
+								d="M3.996.695L5.094 2.9l2.204 1.097l-2.204 1.097l-1.098 2.204L2.9 5.093L.695 3.996L2.9 2.9zM12 3c-.622 0-1.23.063-1.815.183l-.98.2l-.4-1.96l.98-.2A11 11 0 0 1 12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12c0-.885.105-1.746.303-2.573l.233-.972l1.945.466l-.233.973A9 9 0 1 0 12 3m2.512 5.934h2.004v2.004h-2.003zm-7.049 0h2.004v2.004H7.463zm2.447 4.252l.488.872a1.834 1.834 0 0 0 3.206 0l.488-.872l1.745.977l-.488.872a3.834 3.834 0 0 1-6.696 0l-.488-.872zm10.92 7.633l-1.568.78l1.569.782l.78 1.569l.782-1.57l1.569-.78l-1.57-.781l-.78-1.569z"
+							/>
+						</svg>
+						登录账号
+					</button>
+				</div>
 
-        <!-- 启动游戏按钮 -->
-        <button
-          class="launch-button"
-          :disabled="!currentAccount"
-          @click="launchGame"
-        >
-          <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2m0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8s-8 3.58-8 8s3.58 8 8 8m1-8v4h-2v-4H8l4-4l4 4z"/>
-          </svg>
-          启动游戏
-        </button>
-      </div>
-    </div>
+				<!-- 启动游戏按钮 -->
+				<button class="launch-button" :disabled="!currentAccount" @click="launchGame">
+					<svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+						<path
+							fill="currentColor"
+							d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12S6.48 2 12 2m0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8s-8 3.58-8 8s3.58 8 8 8m1-8v4h-2v-4H8l4-4l4 4z"
+						/>
+					</svg>
+					启动游戏
+				</button>
+			</div>
+		</div>
 
-    <!-- 主内容区域 -->
-    <div class="main-content">
-      <!-- 欢迎栏 -->
-      <div v-if="homeSettings.showWelcome.value" class="welcome-section">
-        <h1>欢迎回来{{ currentAccount ? '，' + currentAccount.username : '' }}！</h1>
-        <p>准备好开始新的冒险了吗？</p>
-      </div>
-
-      <!-- 最近游戏栏 -->
-      <div v-if="homeSettings.showRecentGames.value" class="recent-games">
-        <h2>最近游戏</h2>
-        <div class="game-list">
-          <div v-for="game in recentGames" :key="game.id" class="game-card">
-            <img :src="game.icon" :alt="game.name" class="game-icon">
-            <div class="game-info">
-              <h3>{{ game.name }}</h3>
-              <p>{{ game.lastPlayed }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+		<!-- 主内容区域 -->
+		<div class="main-content">
+			<!-- 欢迎栏 -->
+			<div v-if="homeSettings.showWelcome.value" class="welcome-section">
+				<h1>欢迎回来{{ currentAccount ? '，' + currentAccount.username : '' }}！</h1>
+				<p>准备好开始新的冒险了吗？</p>
+			</div>
 
 			<!-- 最近游戏栏 -->
-			<div v-if="showRecentGames" class="recent-games">
+			<div v-if="homeSettings.showRecentGames.value" class="recent-games">
 				<h2>最近游戏</h2>
 				<div class="game-list">
 					<div v-for="game in recentGames" :key="game.id" class="game-card">
@@ -112,48 +120,62 @@
 			</div>
 		</div>
 
-		<!-- 登录相关的模态框 -->
-		<Modal v-if="showLoginModal" @close="closeLoginModal">
-			<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
-			<OfflineLoginForm
-				v-else-if="loginType === 'offline'"
-				@back="loginType = ''"
-				@submit="handleOfflineLogin"
-			/>
-			<template v-else-if="loginType === 'microsoft'">
-				<MicrosoftLoginForm
-					:state="microsoftLoginState"
-					@back="loginType = ''"
-					@submit="handleMicrosoftCode"
-				/>
-			</template>
-		</Modal>
-
-		<Modal v-if="showOfflineLogin" @close="showOfflineLogin = false">
-			<div class="offline-login-form">
-				<h2>离线登录</h2>
-				<form @submit.prevent="loginOffline">
-					<div class="form-group">
-						<label>用户名</label>
-						<input v-model="offlineUsername" type="text" required />
+		<!-- 最近游戏栏 -->
+		<div v-if="showRecentGames" class="recent-games">
+			<h2>最近游戏</h2>
+			<div class="game-list">
+				<div v-for="game in recentGames" :key="game.id" class="game-card">
+					<img :src="game.icon" :alt="game.name" class="game-icon" />
+					<div class="game-info">
+						<h3>{{ game.name }}</h3>
+						<p>{{ game.lastPlayed }}</p>
 					</div>
-					<button type="submit">登录</button>
-				</form>
+				</div>
 			</div>
-		</Modal>
-
-		<!-- 添加到 template 中的 Modal 部分 -->
-		<ConfirmDialog
-			v-if="showDeleteConfirm"
-			title="删除账号"
-			:message="'确定要删除账号 ' + accountToDelete?.username + ' 吗？此操作无法撤销。'"
-			confirmText="删除"
-			:danger="true"
-			:requireInput="true"
-			@close="cancelDelete"
-			@confirm="confirmDelete"
-		/>
+		</div>
 	</div>
+
+	<!-- 登录相关的模态框 -->
+	<Modal v-if="showLoginModal" @close="closeLoginModal">
+		<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
+		<OfflineLoginForm
+			v-else-if="loginType === 'offline'"
+			@back="loginType = ''"
+			@submit="handleOfflineLogin"
+		/>
+		<template v-else-if="loginType === 'microsoft'">
+			<MicrosoftLoginForm
+				:state="microsoftLoginState"
+				@back="loginType = ''"
+				@submit="handleMicrosoftCode"
+			/>
+		</template>
+	</Modal>
+
+	<Modal v-if="showOfflineLogin" @close="showOfflineLogin = false">
+		<div class="offline-login-form">
+			<h2>离线登录</h2>
+			<form @submit.prevent="loginOffline">
+				<div class="form-group">
+					<label>用户名</label>
+					<input v-model="offlineUsername" type="text" required />
+				</div>
+				<button type="submit">登录</button>
+			</form>
+		</div>
+	</Modal>
+
+	<!-- 添加到 template 中的 Modal 部分 -->
+	<ConfirmDialog
+		v-if="showDeleteConfirm"
+		title="删除账号"
+		:message="'确定要删除账号 ' + accountToDelete?.username + ' 吗？此操作无法撤销。'"
+		confirmText="删除"
+		:danger="true"
+		:requireInput="true"
+		@close="cancelDelete"
+		@confirm="confirmDelete"
+	/>
 </template>
 
 <style scoped>
@@ -265,21 +287,21 @@
 }
 
 .avatar-container {
-  width: 64px;
-  height: 64px;
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--background-color);
+	width: 64px;
+	height: 64px;
+	position: relative;
+	border-radius: 8px;
+	overflow: hidden;
+	background: var(--background-color);
 }
 
 .avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  image-rendering: pixelated;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	image-rendering: pixelated;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .account-details {
@@ -400,9 +422,9 @@
 }
 
 .account-item .avatar {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
 }
 
 .account-item .account-details {
@@ -439,19 +461,19 @@
 
 /* 启动按钮样式 */
 .launch-button {
-  background: var(--theme-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+	background: var(--theme-color);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 1rem;
+	font-size: 1.1rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
 }
 
 .launch-button:disabled {
@@ -460,9 +482,9 @@
 }
 
 .launch-button .icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
 }
 
 /* 登录模态框样式 */
@@ -803,77 +825,77 @@
 }
 
 .version-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+	display: flex;
+	gap: 1rem;
+	margin-top: 1rem;
 }
 
 .version-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 8px;
-  background: var(--surface-color);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1rem;
+	border: none;
+	border-radius: 8px;
+	background: var(--surface-color);
+	color: var(--text-color);
+	cursor: pointer;
+	transition: all 0.3s ease;
 }
 
 .version-button:hover {
-  transform: translateY(-2px);
-  background: rgba(var(--theme-color-rgb), 0.1);
+	transform: translateY(-2px);
+	background: rgba(var(--theme-color-rgb), 0.1);
 }
 
 .version-button .icon {
-  width: 24px;
-  height: 24px;
+	width: 24px;
+	height: 24px;
 }
 
 .page-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--background-color);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var(--background-color);
 }
 
 .home-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2rem;
-  position: relative;
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 2rem;
+	position: relative;
 }
 
 /* 优化滚动条样式 */
 .home-content::-webkit-scrollbar {
-  width: 8px;
+	width: 8px;
 }
 
 .home-content::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 .home-content::-webkit-scrollbar-thumb {
-  background: rgba(var(--theme-color-rgb), 0.2);
-  border-radius: 4px;
+	background: rgba(var(--theme-color-rgb), 0.2);
+	border-radius: 4px;
 }
 
 .home-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--theme-color-rgb), 0.3);
+	background: rgba(var(--theme-color-rgb), 0.3);
 }
 </style>
 
 <script setup>
-import { ref, computed, onMounted, watch, inject } from 'vue'
-import { accountService } from '../services/accountService'
-import Modal from '../components/Modal.vue'
-import LoginSelector from '../components/LoginSelector.vue'
-import OfflineLoginForm from '../components/OfflineLoginForm.vue'
-import ConfirmDialog from '../components/ConfirmDialog.vue'
-import MicrosoftLoginForm from '../components/MicrosoftLoginForm.vue'
+import { ref, computed, onMounted, watch, inject } from 'vue';
+import { accountService } from '../services/accountService';
+import Modal from '../components/Modal.vue';
+import LoginSelector from '../components/LoginSelector.vue';
+import OfflineLoginForm from '../components/OfflineLoginForm.vue';
+import ConfirmDialog from '../components/ConfirmDialog.vue';
+import MicrosoftLoginForm from '../components/MicrosoftLoginForm.vue';
 
 // 使用账号服务
 const { currentAccount, accounts } = accountService;
@@ -886,10 +908,10 @@ const showDeleteConfirm = ref(false);
 const accountToDelete = ref(null);
 
 // 添加离线登录状态
-const showOfflineLogin = ref(false)
+const showOfflineLogin = ref(false);
 
 // 注入主页设置
-const homeSettings = inject('homeSettings')
+const homeSettings = inject('homeSettings');
 
 // 模拟最近游戏数据
 const recentGames = ref([
@@ -947,23 +969,23 @@ const closeLoginModal = () => {
 
 // 处理登录方式选择
 const handleLoginSelect = (type) => {
-  console.log('选择登录方式:', type)
-  loginType.value = type
-  if (type === 'microsoft') {
-    handleMicrosoftLogin()
-  }
-}
+	console.log('选择登录方式:', type);
+	loginType.value = type;
+	if (type === 'microsoft') {
+		handleMicrosoftLogin();
+	}
+};
 
 // 处理离线登录
 const handleOfflineLogin = async (username) => {
-  console.log('处理离线登录:', username)
-  try {
-    await accountService.loginOffline(username)
-    closeLoginModal()
-  } catch (error) {
-    console.error('离线登录失败:', error)
-  }
-}
+	console.log('处理离线登录:', username);
+	try {
+		await accountService.loginOffline(username);
+		closeLoginModal();
+	} catch (error) {
+		console.error('离线登录失败:', error);
+	}
+};
 
 // Microsoft 登录状态
 const microsoftLoginState = ref('initial');
@@ -994,11 +1016,11 @@ const handleMicrosoftCode = async (code) => {
 
 // 初始化
 onMounted(() => {
-  // 点击外部关闭账号菜单
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.account-section')) {
-      showAccountMenu.value = false
-    }
-  })
-})
+	// 点击外部关闭账号菜单
+	document.addEventListener('click', (e) => {
+		if (!e.target.closest('.account-section')) {
+			showAccountMenu.value = false;
+		}
+	});
+});
 </script>

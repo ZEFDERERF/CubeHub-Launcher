@@ -1,9 +1,13 @@
 # dependency directories
 node_modules/
 
+# build
+dist/
+
 # Optional npm and yarn cache directory
 .npm/
 .yarn/
+Cargo.lock
 
 # Output of 'npm pack'
 *.tgz

@@ -102,20 +102,9 @@ export async function renderSkinHead(skinUrl: string): Promise<string> {
 	ctx.clearRect(0, 0, 128, 128);
 
 	// 绘制头部主体（正面）
-	ctx.drawImage(skinImage, 8, 8, 8, 8, 32, 32, 64, 64);
-
+	ctx.drawImage(skinImage, 8, 8, 8, 8, 0, 0, 128, 128);
 	// 绘制头部覆盖层（如果有的话）
-	ctx.drawImage(skinImage, 40, 8, 8, 8, 32, 32, 64, 64);
-
-	// 绘制右侧面
-	ctx.drawImage(skinImage, 0, 8, 8, 8, 0, 32, 32, 64);
-	// 右侧面覆盖层
-	ctx.drawImage(skinImage, 32, 8, 8, 8, 0, 32, 32, 64);
-
-	// 绘制顶部
-	ctx.drawImage(skinImage, 8, 0, 8, 8, 32, 0, 64, 32);
-	// 顶部覆盖层
-	ctx.drawImage(skinImage, 40, 0, 8, 8, 32, 0, 64, 32);
+	ctx.drawImage(skinImage, 40, 8, 8, 8, 0, 0, 128, 128);
 
 	// 添加阴影效果
 	const gradient = ctx.createLinearGradient(0, 96, 0, 128);

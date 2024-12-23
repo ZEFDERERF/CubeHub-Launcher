@@ -12,16 +12,45 @@
 	},
 	"tauri": {
 		"allowlist": {
-			"all": true
+			"all": false,
+			"dialog": {
+				"all": true
+			},
+			"fs": {
+				"all": true,
+				"scope": ["**"]
+			},
+			"path": {
+				"all": true
+			}
 		},
 		"bundle": {
 			"active": true,
-			"targets": "all",
+			"category": "DeveloperTool",
+			"icon": ["icons/icon.ico"],
 			"identifier": "com.cubehub.launcher",
-			"icon": ["icons/icon.ico"]
+			"longDescription": "",
+			"macOS": {
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": [],
+			"shortDescription": "",
+			"targets": "all",
+			"windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
 		},
 		"security": {
 			"csp": null
+		},
+		"updater": {
+			"active": false
 		},
 		"windows": [
 			{
@@ -29,7 +58,9 @@
 				"height": 600,
 				"resizable": true,
 				"title": "CubeHub Launcher",
-				"width": 800
+				"width": 800,
+				"transparent": true,
+				"decorations": false
 			}
 		]
 	}
