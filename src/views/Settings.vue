@@ -304,10 +304,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, inject, provide, reactive } from 'vue'
-import { open } from '@tauri-apps/api/dialog'
-import { appDir } from '@tauri-apps/api/path'
-import { exists, createDir } from '@tauri-apps/api/fs'
+import { ref, computed, onMounted, onUnmounted, watch, inject, provide, reactive } from 'vue';
+import { open } from '@tauri-apps/api/dialog';
+import { appDir } from '@tauri-apps/api/path';
+import { exists, createDir } from '@tauri-apps/api/fs';
 
 // 定义事件发射器
 const emit = defineEmits(['update-background']);
@@ -337,32 +337,32 @@ const maxDownloads = ref(Number(localStorage.getItem('maxDownloads')) || 16);
 const currentStyle = ref(parseInt(localStorage.getItem('backgroundStyle')) || 1);
 
 // 注入主页设置
-const homeSettings = inject('homeSettings')
+const homeSettings = inject('homeSettings');
 
 // 菜单配置
 const menuItems = [
-  {
-    id: 'game',
-    label: '游戏',
-    icon: `<svg width="128" height="128" viewBox="0 0 24 24">
+	{
+		id: 'game',
+		label: '游戏',
+		icon: `<svg width="128" height="128" viewBox="0 0 24 24">
       <path fill="currentColor" d="M5 5v14h14V5zM3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm12.5 12a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3M10 8.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m2 5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3"/>
-    </svg>`
-  },
-  {
-    id: 'personalization',
-    label: '个性化',
-    icon: `<svg width="122.88" height="128" viewBox="0 0 24 25">
+    </svg>`,
+	},
+	{
+		id: 'personalization',
+		label: '个性化',
+		icon: `<svg width="122.88" height="128" viewBox="0 0 24 25">
       <path fill="currentColor" d="m11.41.06l3.716 6.174l7.02 1.626l-4.724 5.44l.623 7.18l-6.635-2.812l-6.634 2.811l.623-7.178L.676 7.86l7.02-1.626zm0 3.88L8.972 7.99L4.365 9.058l3.1 3.572l-.41 4.711l4.355-1.845l4.355 1.845l-.409-4.711l3.1-3.572l-4.607-1.067zm9.453 10.071l2.475 2.475l-1.414 1.414l-2.475-2.474zm-8.296 6.116l2.474 2.475l-1.414 1.414l-2.475-2.475zm6.578 0l2.474 2.475l-1.414 1.414l-2.475-2.475z"/>
-    </svg>`
-  },
-  {
-    id: 'launcher',
-    label: '启动器',
-    icon: `<svg width="128" height="128" viewBox="0 0 24 24">
+    </svg>`,
+	},
+	{
+		id: 'launcher',
+		label: '启动器',
+		icon: `<svg width="128" height="128" viewBox="0 0 24 24">
       <path fill="currentColor" d="M8 4a1 1 0 1 0 0 2a1 1 0 0 0 0-2M5.17 4a3.001 3.001 0 0 1 5.66 0H22v2H10.83a3.001 3.001 0 0 1-5.66 0H2V4zm8 7a3.001 3.001 0 0 1 5.66 0H22v2h-3.17a3.001 3.001 0 0 1-5.66 0H2v-2zM16 11a1 1 0 1 0 0 2a1 1 0 0 0 0-2m-8 7a1 1 0 1 0 0 2a1 1 0 0 0 0-2m-2.83 0a3.001 3.001 0 0 1 5.66 0H22v2H10.83a3.001 3.001 0 0 1-5.66 0H2v-2z"/>
-    </svg>`
-  }
-]
+    </svg>`,
+	},
+];
 
 // 设颜色
 const presetColors = [
@@ -763,8 +763,8 @@ const toggleRecentGames = () => {
 <style scoped>
 /* 添加字体声明 */
 @font-face {
-  font-family: 'CubeHub';
-  src: url('@/assets/Fonts/Font.ttf') format('truetype');
+	font-family: 'CubeHub';
+	src: url('@/assets/Fonts/Font.ttf') format('truetype');
 }
 
 /* 修改全局体 */
@@ -841,30 +841,30 @@ input {
 }
 
 .settings-page {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--background-color);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var(--background-color);
 }
 
 .settings-main {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  position: relative;
+	flex: 1;
+	display: flex;
+	overflow: hidden;
+	position: relative;
 }
 
 .settings-sidebar {
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  background: var(--surface-color);
-  border-right: 1px solid rgba(128, 128, 128, 0.1);
-  overflow-y: auto;
-  overflow-x: hidden;
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 2rem 1rem;
+	background: var(--surface-color);
+	border-right: 1px solid rgba(128, 128, 128, 0.1);
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .sidebar-btn {
@@ -913,11 +913,11 @@ input {
 }
 
 .settings-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2rem;
-  background: var(--background-color);
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 2rem;
+	background: var(--background-color);
 }
 
 .settings-section {
@@ -1469,29 +1469,29 @@ select:focus {
 }
 
 .toggle-btn.active {
-  background: transparent;
-  color: var(--text-color);
-  border-color: rgba(var(--theme-color-rgb), 0.2);
-  box-shadow: none;
+	background: transparent;
+	color: var(--text-color);
+	border-color: rgba(var(--theme-color-rgb), 0.2);
+	box-shadow: none;
 }
 
 .toggle-btn:not(.active) {
-  background: var(--theme-color);
-  color: white;
-  border-color: var(--theme-color);
-  box-shadow: 0 2px 8px rgba(var(--theme-color-rgb), 0.2);
+	background: var(--theme-color);
+	color: white;
+	border-color: var(--theme-color);
+	box-shadow: 0 2px 8px rgba(var(--theme-color-rgb), 0.2);
 }
 
 .toggle-btn:hover {
-  transform: translateY(-1px);
+	transform: translateY(-1px);
 }
 
 .toggle-btn.active:hover {
-  background: rgba(var(--theme-color-rgb), 0.1);
+	background: rgba(var(--theme-color-rgb), 0.1);
 }
 
 .toggle-btn:not(.active):hover {
-  filter: brightness(1.1);
+	filter: brightness(1.1);
 }
 
 /* 添加自定义颜色输入相关样式 */
@@ -1762,64 +1762,64 @@ select:focus {
 
 /* 修改页面容器样式 */
 .page-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--background-color);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var(--background-color);
 }
 
 /* 修改设置页面的布局 */
 .settings-page {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	position: relative;
 }
 
 /* 修改主要内容区域的布局 */
 .settings-main {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  position: relative;
+	flex: 1;
+	display: flex;
+	overflow: hidden;
+	position: relative;
 }
 
 /* 修改边栏样式 */
 .settings-sidebar {
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  background: var(--surface-color);
-  border-right: 1px solid rgba(128, 128, 128, 0.1);
-  overflow-y: auto;
-  overflow-x: hidden;
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 2rem 1rem;
+	background: var(--surface-color);
+	border-right: 1px solid rgba(128, 128, 128, 0.1);
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 /* 修改内容区域样式 */
 .settings-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2rem;
-  background: var(--background-color);
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 2rem;
+	background: var(--background-color);
 }
 
 /* 修改滚动内容区域 */
 .scrollable-content {
-  height: auto;
-  min-height: min-content;
+	height: auto;
+	min-height: min-content;
 }
 
 /* 修改设置区块样式 */
 .settings-section {
-  opacity: 1;
-  visibility: visible;
-  height: auto;
-  overflow: visible;
+	opacity: 1;
+	visibility: visible;
+	height: auto;
+	overflow: visible;
 }
 
 /* 修改标题栏阴影效果 */
@@ -1842,19 +1842,19 @@ select:focus {
 
 /* 调整边栏样式 */
 .settings-sidebar {
-  height: 100%;
-  overflow-y: auto;
-  flex-shrink: 0;
-  background: var(--surface-color);
-  z-index: 2;
+	height: 100%;
+	overflow-y: auto;
+	flex-shrink: 0;
+	background: var(--surface-color);
+	z-index: 2;
 }
 
 /* 优化设置内容块样式 */
 .settings-section {
-  opacity: 1;
-  visibility: visible;
-  height: auto;
-  overflow: visible;
+	opacity: 1;
+	visibility: visible;
+	height: auto;
+	overflow: visible;
 }
 
 /* 优化侧边栏按钮样式 */
@@ -1908,11 +1908,11 @@ select:focus {
 
 /* 设置内容区域样式 */
 .settings-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2rem;
-  background: var(--background-color);
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 2rem;
+	background: var(--background-color);
 }
 
 .toggle-btn {
@@ -2050,35 +2050,41 @@ select:focus {
 }
 
 /* 为每个按钮设置不同的延迟 */
-.settings-sidebar .sidebar-btn:nth-child(1) { animation-delay: 0.1s; }
-.settings-sidebar .sidebar-btn:nth-child(2) { animation-delay: 0.2s; }
-.settings-sidebar .sidebar-btn:nth-child(3) { animation-delay: 0.3s; }
+.settings-sidebar .sidebar-btn:nth-child(1) {
+	animation-delay: 0.1s;
+}
+.settings-sidebar .sidebar-btn:nth-child(2) {
+	animation-delay: 0.2s;
+}
+.settings-sidebar .sidebar-btn:nth-child(3) {
+	animation-delay: 0.3s;
+}
 
 /* 确保内容区域正确显示 */
 .settings-content {
-  min-width: 0;
-  position: relative;
+	min-width: 0;
+	position: relative;
 }
 
 /* 优化滚动条样式 */
 .settings-content::-webkit-scrollbar,
 .settings-sidebar::-webkit-scrollbar {
-  width: 8px;
+	width: 8px;
 }
 
 .settings-content::-webkit-scrollbar-track,
 .settings-sidebar::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 .settings-content::-webkit-scrollbar-thumb,
 .settings-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(var(--theme-color-rgb), 0.2);
-  border-radius: 4px;
+	background: rgba(var(--theme-color-rgb), 0.2);
+	border-radius: 4px;
 }
 
 .settings-content::-webkit-scrollbar-thumb:hover,
 .settings-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--theme-color-rgb), 0.3);
+	background: rgba(var(--theme-color-rgb), 0.3);
 }
 </style>

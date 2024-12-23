@@ -1,6 +1,6 @@
-import { ref } from 'vue'
-import type { Account } from '../types'
-import { getRandomSkin } from '../utils/skinUtils'
+import { ref } from 'vue';
+import type { Account } from '../types';
+import { getRandomSkin } from '../utils/skinUtils';
 
 class AccountService {
 	private currentAccount = ref<Account | null>(null);

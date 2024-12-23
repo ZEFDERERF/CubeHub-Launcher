@@ -35,14 +35,14 @@ export interface DownloadProgress {
 }
 
 export interface Account {
-  id: string
-  type: 'microsoft' | 'offline'
-  username: string
-  avatar: string
-  accessToken?: string
-  refreshToken?: string
-  expiresAt?: string
-  createdAt: string
+	id: string;
+	type: 'microsoft' | 'offline';
+	username: string;
+	avatar: string;
+	accessToken?: string;
+	refreshToken?: string;
+	expiresAt?: string;
+	createdAt: string;
 }
 
 export interface MicrosoftAuthResult {
