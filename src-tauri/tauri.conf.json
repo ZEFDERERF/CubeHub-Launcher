@@ -19,7 +19,7 @@
       "targets": "all",
       "identifier": "com.cubehub.launcher",
       "icon": [
-        "icons/logo.png"
+        "icons/icon.ico"
       ]
     },
     "security": {
