@@ -13,7 +13,7 @@ edition = "2021"
 tauri-build = { version = "1.5", features = [] }
 
 [dependencies]
-tauri = { version = "1.5", features = [ "path-all", "fs-all", "dialog-all"] }
+tauri = { version = "1.5", features = [ "path-all", "fs-all", "dialog-all", "window-hide", "window-minimize", "window-maximize", "window-close", "window-set-title", "window-create", "window-set-content-protected"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 reqwest = { version = "0.11", features = ["json"] }
