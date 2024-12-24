@@ -919,7 +919,7 @@ const recentGames = ref([
 		id: 1,
 		name: 'Minecraft 1.20.1',
 		lastPlayed: '2小时前',
-		icon: '/path/to/icon.png',
+		icon: '/public/IMG/Icons/Grass.png',
 	},
 	// ... 更多游戏
 ]);
