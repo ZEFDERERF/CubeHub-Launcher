@@ -135,46 +135,46 @@
 		</div>
 
 		<!-- 登录相关的模态框 -->
-	<Modal v-if="showLoginModal" @close="closeLoginModal">
-		<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
-		<OfflineLoginForm
-			v-else-if="loginType === 'offline'"
-			@back="loginType = ''"
-			@submit="handleOfflineLogin"
-		/>
-		<template v-else-if="loginType === 'microsoft'">
-			<MicrosoftLoginForm
-				:state="microsoftLoginState"
+		<Modal v-if="showLoginModal" @close="closeLoginModal">
+			<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
+			<OfflineLoginForm
+				v-else-if="loginType === 'offline'"
 				@back="loginType = ''"
-				@submit="handleMicrosoftCode"
+				@submit="handleOfflineLogin"
 			/>
-		</template>
-	</Modal>
+			<template v-else-if="loginType === 'microsoft'">
+				<MicrosoftLoginForm
+					:state="microsoftLoginState"
+					@back="loginType = ''"
+					@submit="handleMicrosoftCode"
+				/>
+			</template>
+		</Modal>
 
-	<Modal v-if="showOfflineLogin" @close="showOfflineLogin = false">
-		<div class="offline-login-form">
-			<h2>离线登录</h2>
-			<form @submit.prevent="loginOffline">
-				<div class="form-group">
-					<label>用户名</label>
-					<input v-model="offlineUsername" type="text" required />
-				</div>
-				<button type="submit">登录</button>
-			</form>
-		</div>
-	</Modal>
+		<Modal v-if="showOfflineLogin" @close="showOfflineLogin = false">
+			<div class="offline-login-form">
+				<h2>离线登录</h2>
+				<form @submit.prevent="loginOffline">
+					<div class="form-group">
+						<label>用户名</label>
+						<input v-model="offlineUsername" type="text" required />
+					</div>
+					<button type="submit">登录</button>
+				</form>
+			</div>
+		</Modal>
 
-	<!-- 添加到 template 中的 Modal 部分 -->
-	<ConfirmDialog
-		v-if="showDeleteConfirm"
-		title="删除账号"
-		:message="'确定要删除账号 ' + accountToDelete?.username + ' 吗？此操作无法撤销。'"
-		confirmText="删除"
-		:danger="true"
-		:requireInput="true"
-		@close="cancelDelete"
-		@confirm="confirmDelete"
-	/>
+		<!-- 添加到 template 中的 Modal 部分 -->
+		<ConfirmDialog
+			v-if="showDeleteConfirm"
+			title="删除账号"
+			:message="'确定要删除账号 ' + accountToDelete?.username + ' 吗？此操作无法撤销。'"
+			confirmText="删除"
+			:danger="true"
+			:requireInput="true"
+			@close="cancelDelete"
+			@confirm="confirmDelete"
+		/>
 	</div>
 </template>
 
