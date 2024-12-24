@@ -143,21 +143,6 @@
 								}}</span>
 								<span class="version-date">{{ version.releaseTime }}</span>
 							</div>
-							<div class="version-actions">
-								<button
-									class="download-btn"
-									@click.stop="startDownload(version.id, 'vanilla')"
-								>
-									下载
-								</button>
-								<router-link
-									:to="`/download/${version.id}/more`"
-									class="more-btn"
-									@click.stop
-								>
-									更多选项
-								</router-link>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -628,8 +613,10 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 </style>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { downloadManager } from '../services/downloadManager';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // 版本类型和计数
 const currentCategory = ref('release');
@@ -640,24 +627,17 @@ const versionCounts = ref({
 	april_fools: 8,
 });
 
-// 搜索和版本表态
+// 搜索和版本状态
 const searchQuery = ref('');
 const versions = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
-// 下载状态
-const isDownloading = ref(false);
-const currentDownload = ref({
-	version: '',
-	type: '',
-});
-
 // 获取版本类型的显示名称
 const getTabName = (type) => {
 	const names = {
 		release: '正式版',
-		snapshot: '预览版',
+		snapshot: '快照版',
 		old_alpha: '远古版',
 		april_fools: '愚人节版本',
 	};
@@ -787,23 +767,6 @@ const updateVersionCounts = () => {
 	versionCounts.value = counts;
 };
 
-// 开始下载
-const startDownload = (version, type) => {
-	isDownloading.value = true;
-	currentDownload.value = { version, type };
-	downloadManager.startDownload(version, type);
-};
-
-// 取消下载
-const cancelDownload = () => {
-	isDownloading.value = false;
-	currentDownload.value = { version: '', type: '' };
-	downloadManager.cancelDownload();
-};
-
-// 初始化
-fetchVersions();
-
 // 添加动画状态控制
 const isAnimating = ref(false);
 
@@ -825,8 +788,24 @@ const handleCategoryChange = async (type) => {
 // 添加选中状态
 const selectedVersion = ref(null);
 
-// 修改版本点击处理
+// 添加版本点击处理函数
 const handleVersionClick = (version) => {
-	selectedVersion.value = version.id === selectedVersion.value ? null : version.id;
+	try {
+		console.log('Clicking version:', version);
+		selectedVersion.value = version.id;
+		console.log('Navigating to version:', version.id);
+
+		router.push({
+			name: 'VersionMore',
+			params: {
+				version: version.id,
+			},
+		});
+	} catch (error) {
+		console.error('Navigation error:', error);
+	}
 };
+
+// 初始化
+fetchVersions();
 </script>
