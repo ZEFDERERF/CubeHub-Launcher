@@ -3,73 +3,123 @@
 		<div class="download-container">
 			<!-- 左侧版本切换侧边栏 -->
 			<nav class="version-sidebar">
-				<button
-					v-for="(count, type) in versionCounts"
-					:key="type"
-					class="version-nav-btn"
-					:class="{ active: currentCategory === type }"
-					@click="handleCategoryChange(type)"
-					:disabled="isAnimating"
-				>
-					<div class="btn-content">
-						<div class="icon-label">
-							<!-- 正式版图标 -->
-							<svg
-								v-if="type === 'release'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12m0-2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"
-								/>
-							</svg>
-							<!-- 预览版图标 -->
-							<svg
-								v-else-if="type === 'snapshot'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M9 16.42v3.049l3-1.8l3 1.8v-3.05A8 8 0 0 1 12 17a8 8 0 0 1-3-.581M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12"
-								/>
-							</svg>
-							<!-- 远古版图标 -->
-							<svg
-								v-else-if="type === 'old_alpha'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M20 3.107a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1zm-8.811 10.158L5 14.355v4.752h7.218zM19 5.107h-7.219l2.468 14H19zm-9.25 0H5v7.218l5.842-1.03z"
-								/>
-							</svg>
-							<!-- 愚人节版图标 -->
-							<svg
-								v-else-if="type === 'april_fools'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-4-7h8a4 4 0 0 1-8 0m0-2a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
-								/>
-							</svg>
-							<span class="version-label">{{ getTabName(type) }}</span>
+				<div class="version-categories">
+					<button
+						v-for="(count, type) in versionCounts"
+						:key="type"
+						class="version-nav-btn"
+						:class="{ active: currentCategory === type }"
+						@click="handleCategoryChange(type)"
+						:disabled="isAnimating"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<!-- 正式版图标 -->
+								<svg
+									v-if="type === 'release'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12m0-2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"
+									/>
+								</svg>
+								<!-- 预览版图标 -->
+								<svg
+									v-else-if="type === 'snapshot'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M9 16.42v3.049l3-1.8l3 1.8v-3.05A8 8 0 0 1 12 17a8 8 0 0 1-3-.581M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12"
+									/>
+								</svg>
+								<!-- 远古版图标 -->
+								<svg
+									v-else-if="type === 'old_alpha'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M20 3.107a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1zm-8.811 10.158L5 14.355v4.752h7.218zM19 5.107h-7.219l2.468 14H19zm-9.25 0H5v7.218l5.842-1.03z"
+									/>
+								</svg>
+								<!-- 愚人节版本图标 -->
+								<svg
+									v-else-if="type === 'april_fools'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-4-7h8a4 4 0 0 1-8 0m0-2a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
+									/>
+								</svg>
+								<span class="version-label">{{ getTabName(type) }}</span>
+							</div>
+							<span class="version-count">{{ count }}</span>
 						</div>
-						<span class="version-count">{{ count }}</span>
-					</div>
-				</button>
+					</button>
+				</div>
+
+				<!-- 添加 MOD 和整合包按钮 -->
+				<div class="additional-options">
+					<button
+						class="version-nav-btn"
+						:class="{ active: currentCategory === 'mods' }"
+						@click="handleCategoryChange('mods')"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<svg
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18c-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18c.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9M12 4.15L6.04 7.5L12 10.85l5.96-3.35L12 4.15M5 15.91l6 3.38v-6.71L5 9.21v6.7m14 0v-6.7l-6 3.37v6.71l6-3.38Z"
+									/>
+								</svg>
+								<span class="version-label">MOD</span>
+							</div>
+						</div>
+					</button>
+					<button
+						class="version-nav-btn"
+						:class="{ active: currentCategory === 'modpacks' }"
+						@click="handleCategoryChange('modpacks')"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<svg
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="m10.414 3l2 2H21a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM18 18h-4v-3h2v-2h-2v-2h2V9h-2V7h-2.414l-2-2H4v14h16V7h-4v2h2v2h-2v2h2z"
+									/>
+								</svg>
+								<span class="version-label">整合包</span>
+							</div>
+						</div>
+					</button>
+				</div>
 			</nav>
 
 			<!-- 主内容区域 -->
@@ -80,7 +130,7 @@
 						<input
 							v-model="searchQuery"
 							type="text"
-							placeholder="搜索版本..."
+							:placeholder="`搜索${currentCategory === 'mods' ? 'MOD' : currentCategory === 'modpacks' ? '整合包' : '版本'}...`"
 							class="search-input"
 						/>
 					</div>
@@ -121,11 +171,11 @@
 								/>
 							</path>
 						</svg>
-						<span class="loading-text">正在加载版本列表...</span>
+						<span class="loading-text">{{ getLoadingText }}</span>
 					</div>
 					<div v-else-if="error" class="error">{{ error }}</div>
 					<div v-else-if="filteredVersions.length === 0" class="no-results">
-						没有找到匹配的版本
+						{{ getNoResultsText }}
 					</div>
 					<div v-else class="version-list">
 						<div
@@ -136,7 +186,8 @@
 							:style="{ '--index': index }"
 							@click="handleVersionClick(version)"
 						>
-							<div class="version-id">{{ version.id }}</div>
+							<div class="version-id" v-if="currentCategory === 'mods' || currentCategory === 'modpacks'">{{ version.title }}</div>
+							<div class="version-id" v-else>{{ version.id }}</div>
 							<div class="version-info">
 								<span class="version-type">{{
 									getVersionTypeName(version.type)
@@ -174,6 +225,8 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	border-right: 1px solid rgba(128, 128, 128, 0.1);
 	box-shadow: 4px 0 16px rgba(0, 0, 0, 0.05);
 	padding: 1rem 0;
+	position: relative;
+	height: 100%;
 }
 
 .main-content {
@@ -610,6 +663,33 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	margin: 2rem;
 	animation: fadeIn 0.3s ease;
 }
+
+.version-sidebar {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.version-categories {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	flex: 1;
+}
+
+.additional-options {
+	position: absolute;
+	bottom: 120px;  /* 调整这个值来控制距离底部的距离 */
+	left: 0;
+	right: 0;
+	padding-top: 1rem;
+	border-top: 1px solid rgba(128, 128, 128, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	background: var(--surface-color);
+}
 </style>
 
 <script setup>
@@ -633,13 +713,21 @@ const versions = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
-// 获取版本类型的显示名称
+// 添加 MOD 和整合包相关的状态
+const modCount = ref(0);
+const modpackCount = ref(0);
+const mods = ref([]);
+const modpacks = ref([]);
+
+// 修改版本类型的显示名称函数
 const getTabName = (type) => {
 	const names = {
 		release: '正式版',
 		snapshot: '快照版',
 		old_alpha: '远古版',
 		april_fools: '愚人节版本',
+		mods: 'MOD',
+		modpacks: '整合包'
 	};
 	return names[type];
 };
@@ -653,7 +741,7 @@ const getVersionTypeName = (type) => {
 		release_candidate: '候选版',
 		old_alpha: '远古版本(Alpha)',
 		old_beta: '远古版本(Beta)',
-		april_fools: '愚人节版本',
+		april_fools: '愚人节版本'
 	};
 	return typeNames[type] || type;
 };
@@ -694,12 +782,26 @@ const isVersionMatch = (version) => {
 	}
 };
 
-// 过滤版本列表
+// 修改过滤版本列表的计算属性
 const filteredVersions = computed(() => {
-	const filtered = versions.value
-		.filter((version) => isVersionMatch(version))
-		.filter((version) => version.id.toLowerCase().includes(searchQuery.value.toLowerCase()));
-	return filtered;
+	let items = [];
+
+	if (currentCategory.value === 'mods') {
+		items = mods.value;
+	} else if (currentCategory.value === 'modpacks') {
+		items = modpacks.value;
+	} else {
+		items = versions.value.filter((version) => isVersionMatch(version));
+	}
+
+	return items.filter((item) => {
+		const searchTerm = searchQuery.value.toLowerCase();
+		if (currentCategory.value === 'mods' || currentCategory.value === 'modpacks') {
+			return item.title.toLowerCase().includes(searchTerm) ||
+				item.description.toLowerCase().includes(searchTerm);
+		}
+		return item.id.toLowerCase().includes(searchTerm);
+	});
 });
 
 // 获取版本列表
@@ -770,7 +872,7 @@ const updateVersionCounts = () => {
 // 添加动画状态控制
 const isAnimating = ref(false);
 
-// 修改版本切换处理
+// 修改版本切换处理函数
 const handleCategoryChange = async (type) => {
 	if (currentCategory.value === type) return;
 	currentCategory.value = type;
@@ -781,8 +883,21 @@ const handleCategoryChange = async (type) => {
 		container.scrollTop = 0;
 	}
 
+	// 根据类型加载不同的数据
+	if (type === 'mods') {
+		await fetchMods();
+	} else if (type === 'modpacks') {
+		await fetchModpacks();
+	}
+
 	// 触发重新动画
-	versions.value = [...versions.value];
+	if (type === 'mods') {
+		versions.value = [...mods.value];
+	} else if (type === 'modpacks') {
+		versions.value = [...modpacks.value];
+	} else {
+		versions.value = [...versions.value];
+	}
 };
 
 // 添加选中状态
@@ -798,13 +913,91 @@ const handleVersionClick = (version) => {
 		router.push({
 			name: 'VersionMore',
 			params: {
-				version: version.id,
-			},
+				version: version.id
+			}
 		});
 	} catch (error) {
 		console.error('Navigation error:', error);
 	}
 };
+
+// 添加获取 MOD 列表的函数
+const fetchMods = async () => {
+	try {
+		loading.value = true;
+		// 这里使用 Modrinth API
+		const response = await fetch('https://api.modrinth.com/v2/search?limit=20&index=downloads');
+		if (!response.ok) throw new Error('Failed to fetch mods');
+
+		const data = await response.json();
+		mods.value = data.hits.map(mod => ({
+			id: mod.project_id,
+			title: mod.title,
+			description: mod.description,
+			downloads: mod.downloads,
+			author: mod.author,
+			versions: mod.versions,
+			releaseTime: new Date(mod.date_modified).toLocaleString('zh-CN', { hour12: false })
+		}));
+		modCount.value = data.total_hits;
+	} catch (err) {
+		error.value = '获取MOD列表失败: ' + err.message;
+		console.error('Error fetching mods:', err);
+	} finally {
+		loading.value = false;
+	}
+};
+
+// 添加获取整合包列表的函数
+const fetchModpacks = async () => {
+	try {
+		loading.value = true;
+		// 这里使用 Modrinth API 获取整合包
+		const response = await fetch('https://api.modrinth.com/v2/search?limit=20&facets=[["project_type:modpack"]]');
+		if (!response.ok) throw new Error('Failed to fetch modpacks');
+
+		const data = await response.json();
+		modpacks.value = data.hits.map(pack => ({
+			id: pack.project_id,
+			title: pack.title,
+			description: pack.description,
+			downloads: pack.downloads,
+			author: pack.author,
+			versions: pack.versions,
+			releaseTime: new Date(pack.date_modified).toLocaleString('zh-CN', { hour12: false })
+		}));
+		modpackCount.value = data.total_hits;
+	} catch (err) {
+		error.value = '获取整合包列表失败: ' + err.message;
+		console.error('Error fetching modpacks:', err);
+	} finally {
+		loading.value = false;
+	}
+};
+
+// 添加加载文本的计算属性
+const getLoadingText = computed(() => {
+	switch (currentCategory.value) {
+		case 'mods':
+			return '正在加载MOD列表...';
+		case 'modpacks':
+			return '正在获取整合包列表...';
+		default:
+			return '正在加载版本列表...';
+	}
+});
+
+// 添加无结果文本的计算属性
+const getNoResultsText = computed(() => {
+	switch (currentCategory.value) {
+		case 'mods':
+			return '没有找到匹配的MOD';
+		case 'modpacks':
+			return '没有找到匹配的整合包';
+		default:
+			return '没有找到匹配的版本';
+	}
+});
 
 // 初始化
 fetchVersions();
