@@ -1,0 +1,27 @@
+{
+	"name": "cubehub-launcher",
+	"private": true,
+	"version": "0.1.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"tauri": "tauri",
+		"lint:prettier": "prettier --write --log-level warn \"src/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\""
+	},
+	"dependencies": {
+		"@tauri-apps/api": "^1.5.0",
+		"cubehub-launcher": "file:",
+		"vue": "^3.3.4",
+		"vue-router": "^4.2.0"
+	},
+	"devDependencies": {
+		"@tauri-apps/cli": "^1.5.0",
+		"@types/node": "^20.0.0",
+		"@vitejs/plugin-vue": "^4.2.3",
+		"prettier": "^3.4.2",
+		"sass": "^1.83.0",
+		"typescript": "^5.0.0",
+		"vite": "^4.4.4"
+	}
+}

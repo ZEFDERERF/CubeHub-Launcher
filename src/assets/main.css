@@ -1,0 +1,98 @@
+:root {
+	--theme-color: #4caf50;
+	--theme-color-light: #81c784;
+	--theme-color-dark: #2e7d32;
+	--background-color: #1a1a1a;
+	--surface-color: #2d2d2d;
+	--text-color: #ffffff;
+	--secondary-text: rgba(255, 255, 255, 0.7);
+	--window-border-radius: 8px;
+}
+
+/* 亮色主题变量 */
+[data-theme='light'] {
+	--background-color: #f5f5f5;
+	--surface-color: #ffffff;
+	--text-color: #333333;
+	--secondary-text: rgba(0, 0, 0, 0.7);
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	background: var(--background-color);
+	color: var(--text-color);
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial,
+		sans-serif;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+/* 全局过渡效果 */
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
+/* 禁用文本选择 */
+.no-select {
+	user-select: none;
+}
+
+/* 基础按钮样式 */
+button {
+	cursor: pointer;
+	border: none;
+	outline: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	transition: all 0.3s ease;
+}
+
+/* 输入框基础样式 */
+input {
+	background: var(--surface-color);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: var(--text-color);
+	padding: 8px 12px;
+	border-radius: 6px;
+	outline: none;
+	transition: all 0.3s ease;
+}
+
+input:focus {
+	border-color: var(--theme-color);
+	box-shadow: 0 0 0 2px rgba(var(--theme-color-rgb), 0.2);
+}

@@ -1,0 +1,70 @@
+{
+	"$schema": "../node_modules/@tauri-apps/cli/schema.json",
+	"build": {
+		"beforeDevCommand": "npm run dev",
+		"beforeBuildCommand": "npm run build",
+		"distDir": "../dist",
+		"withGlobalTauri": true
+	},
+	"package": {
+		"productName": "CubeHub Launcher",
+		"version": "0.1.0"
+	},
+	"tauri": {
+		"allowlist": {
+			"all": false,
+			"dialog": {
+				"all": true
+			},
+			"fs": {
+				"all": true,
+				"scope": ["**"]
+			},
+			"path": {
+				"all": true
+			},
+			"window": {
+				"all": true
+			}
+		},
+		"bundle": {
+			"active": true,
+			"category": "DeveloperTool",
+			"icon": ["icons/icon.ico"],
+			"identifier": "com.cubehub.launcher",
+			"longDescription": "",
+			"macOS": {
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": [],
+			"shortDescription": "",
+			"targets": "all",
+			"windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
+		},
+		"security": {
+			"csp": null
+		},
+		"updater": {
+			"active": false
+		},
+		"windows": [
+			{
+				"fullscreen": false,
+				"height": 600,
+				"resizable": true,
+				"title": "CubeHub Launcher",
+				"width": 800,
+				"transparent": true,
+				"decorations": false
+			}
+		]
+	}
+}
