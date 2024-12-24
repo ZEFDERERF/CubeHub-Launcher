@@ -89,11 +89,14 @@ class AccountService {
 				}, 100);
 
 				// 5分钟超时
-				setTimeout(() => {
-					clearInterval(checkRedirect);
-					authWindow.close();
-					reject(new Error('登录超时'));
-				}, 5 * 60 * 1000);
+				setTimeout(
+					() => {
+						clearInterval(checkRedirect);
+						authWindow.close();
+						reject(new Error('登录超时'));
+					},
+					5 * 60 * 1000
+				);
 			});
 
 			console.log('获取到授权码:', code);

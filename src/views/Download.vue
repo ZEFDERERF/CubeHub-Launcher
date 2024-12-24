@@ -653,7 +653,7 @@ const getVersionTypeName = (type) => {
 		release_candidate: '候选版',
 		old_alpha: '远古版本(Alpha)',
 		old_beta: '远古版本(Beta)',
-		april_fools: '愚人节版本'
+		april_fools: '愚人节版本',
 	};
 	return typeNames[type] || type;
 };
@@ -794,12 +794,12 @@ const handleVersionClick = (version) => {
 		console.log('Clicking version:', version);
 		selectedVersion.value = version.id;
 		console.log('Navigating to version:', version.id);
-		
+
 		router.push({
 			name: 'VersionMore',
 			params: {
-				version: version.id
-			}
+				version: version.id,
+			},
 		});
 	} catch (error) {
 		console.error('Navigation error:', error);

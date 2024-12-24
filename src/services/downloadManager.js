@@ -13,12 +13,14 @@ class DownloadManager {
 		try {
 			this.isDownloading = true;
 			this.downloadProgress = 0;
-			
+
 			// 获取版本信息
-			const manifestResponse = await fetch('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json');
+			const manifestResponse = await fetch(
+				'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'
+			);
 			const manifest = await manifestResponse.json();
-			
-			const versionInfo = manifest.versions.find(v => v.id === version);
+
+			const versionInfo = manifest.versions.find((v) => v.id === version);
 			if (!versionInfo) {
 				throw new Error('未找到指定版本');
 			}
