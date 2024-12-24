@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import type { Account } from '../types';
+import type { Account, MicrosoftAuthResult } from '../types';
 import { getRandomSkin } from '../utils/skinUtils';
 
 class AccountService {
@@ -88,12 +88,12 @@ class AccountService {
 					}
 				}, 100);
 
-				// 30秒超时
+				// 5分钟超时
 				setTimeout(() => {
 					clearInterval(checkRedirect);
 					authWindow.close();
 					reject(new Error('登录超时'));
-				}, 30000);
+				}, 5 * 60 * 1000);
 			});
 
 			console.log('获取到授权码:', code);

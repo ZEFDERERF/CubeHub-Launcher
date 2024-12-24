@@ -194,7 +194,7 @@
 			</nav>
 		</div>
 
-		<div class="titlebar-controls">
+		<div class="titlebar-controls" data-tauri-drag-region>
 			<button class="titlebar-button" @click="minimize">
 				<svg width="10" height="2" viewBox="0 0 10 2">
 					<path d="M0 0h10v1H0z" fill="currentColor" />
@@ -217,7 +217,7 @@
 				</svg>
 			</button>
 		</div>
-		<div class="titlebar-color-layer"></div>
+		<div class="titlebar-color-layer" data-tauri-drag-region></div>
 	</div>
 </template>
 

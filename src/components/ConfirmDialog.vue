@@ -78,18 +78,6 @@
 				<span v-if="showError" class="error-message">请输入正确的确认文本</span>
 			</div>
 
-			<div v-if="requireInput" class="input-section">
-				<p class="input-desc">请输入 <strong>Delete</strong> 以确认删除</p>
-				<input
-					v-model="inputText"
-					type="text"
-					placeholder="Delete"
-					:class="{ error: showError }"
-					@input="handleInput"
-				/>
-				<span v-if="showError" class="error-message">请输入正确的确认文本</span>
-			</div>
-
 			<div class="actions">
 				<button class="cancel-btn" @click="$emit('close')">取消</button>
 				<button

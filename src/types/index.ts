@@ -39,6 +39,7 @@ export interface Account {
 	type: 'microsoft' | 'offline';
 	username: string;
 	avatar: string;
+	skinPath?: string;
 	accessToken?: string;
 	refreshToken?: string;
 	expiresAt?: string;

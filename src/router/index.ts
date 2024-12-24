@@ -3,30 +3,37 @@ import Home from '../views/Home.vue';
 import Download from '../views/Download.vue';
 import Settings from '../views/Settings.vue';
 import VersionMore from '../views/download/VersionMore.vue';
+import VersionList from '../views/download/VersionList.vue';
 
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{
 			path: '/',
-			name: 'home',
+			name: 'Home',
 			component: Home,
 		},
 		{
 			path: '/download',
-			name: 'download',
+			name: 'Download',
 			component: Download,
+			children: [
+				{
+					path: '',
+					name: 'VersionList',
+					component: VersionList,
+				},
+				{
+					path: ':id/more',
+					name: 'VersionMore',
+					component: VersionMore,
+				},
+			],
 		},
 		{
 			path: '/settings',
-			name: 'settings',
+			name: 'Settings',
 			component: Settings,
-		},
-		{
-			path: '/download/:version/more',
-			name: 'version-more',
-			component: VersionMore,
-			props: true,
 		},
 	],
 });

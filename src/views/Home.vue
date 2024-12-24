@@ -133,9 +133,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- 登录相关的模态框 -->
+		<!-- 登录相关的模态框 -->
 	<Modal v-if="showLoginModal" @close="closeLoginModal">
 		<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
 		<OfflineLoginForm
@@ -176,6 +175,7 @@
 		@close="cancelDelete"
 		@confirm="confirmDelete"
 	/>
+	</div>
 </template>
 
 <style scoped>
