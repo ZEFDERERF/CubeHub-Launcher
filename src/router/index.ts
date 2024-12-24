@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import Download from '../views/Download.vue';
 import Settings from '../views/Settings.vue';
-import VersionMore from '../views/download/VersionMore.vue';
+import VersionMore from '../views/download/VersionDetail.vue';
 import VersionList from '../views/download/VersionList.vue';
 
 const router = createRouter({
