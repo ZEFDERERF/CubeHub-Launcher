@@ -3,7 +3,7 @@
 		<transition name="content-transition" mode="out-in">
 			<div class="version-more-container">
 				<div class="version-header">
-					<h2>{{ version }} 详细信息</h2>
+					<h2>{{ versionId }} 详细信息</h2>
 					<div class="version-meta" v-if="versionData">
 						<span class="version-type" :class="versionData.type">
 							{{ getVersionTypeName(versionData.type) }}
@@ -33,9 +33,7 @@
 				</div>
 
 				<div v-if="loading" class="loading">加载中...</div>
-				<div v-if="error" class="error">
-					{{ error }}
-				</div>
+				<div v-if="error" class="error">{{ error }}</div>
 
 				<div class="back-section">
 					<button class="back-btn" @click="handleBack">
@@ -49,16 +47,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { downloadManager } from '../../services/DownloadManager';
+
+// 定义 props
+const props = defineProps({
+	version: {
+		type: String,
+		required: true,
+	},
+});
 
 const route = useRoute();
 const router = useRouter();
-const version = route.params.version;
+const versionId = ref(props.version);
 const versionData = ref(null);
 const loading = ref(true);
 const error = ref(null);
+
+console.log('VersionDetail mounted with props:', props);
+console.log('VersionDetail mounted with route:', {
+	path: route.path,
+	params: route.params,
+	name: route.name,
+	fullPath: route.fullPath,
+});
 
 const getVersionTypeName = (type) => {
 	const typeNames = {
@@ -75,13 +88,14 @@ const getVersionTypeName = (type) => {
 const fetchVersionData = async () => {
 	try {
 		loading.value = true;
+		console.log('Fetching data for version:', versionId.value);
 		const response = await fetch(
 			'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'
 		);
 		if (!response.ok) throw new Error('Failed to fetch version data');
 
 		const data = await response.json();
-		const versionInfo = data.versions.find((v) => v.id === version);
+		const versionInfo = data.versions.find((v) => v.id === versionId.value);
 
 		if (!versionInfo) {
 			throw new Error('Version not found');
@@ -92,6 +106,7 @@ const fetchVersionData = async () => {
 		if (!versionResponse.ok) throw new Error('Failed to fetch version details');
 
 		const versionDetails = await versionResponse.json();
+		console.log('Version details:', versionDetails);
 
 		versionData.value = {
 			...versionInfo,
@@ -100,8 +115,6 @@ const fetchVersionData = async () => {
 				hour12: false,
 			}),
 		};
-
-		console.log('Version data:', versionData.value);
 	} catch (err) {
 		error.value = '获取版本信息失败: ' + err.message;
 		console.error('Error fetching version data:', err);
@@ -111,38 +124,62 @@ const fetchVersionData = async () => {
 };
 
 const startDownload = async (type) => {
-	try {
-		await downloadManager.downloadVersion(version, type);
-	} catch (error) {
-		console.error('下载失败:', error);
-	}
+	console.log('Starting download:', type);
+	// 这里添加下载逻辑
 };
 
 const handleBack = () => {
-	router.push('/download');
+	try {
+		router.push({ name: 'Download' });
+	} catch (error) {
+		console.error('Navigation error:', error);
+	}
 };
 
 onMounted(() => {
-	if (!version) {
-		router.push('/download');
+	console.log('VersionDetail mounted with version:', versionId.value);
+	if (!versionId.value) {
+		console.error('No version parameter found');
+		error.value = '未找到版本参数';
+		router.push({ name: 'Download' });
 		return;
 	}
 	fetchVersionData();
 });
+
+// 监听 props 变化
+watch(
+	() => props.version,
+	(newVersion) => {
+		console.log('Version prop changed:', newVersion);
+		if (newVersion) {
+			versionId.value = newVersion;
+			fetchVersionData();
+		}
+	}
+);
 </script>
 
 <style scoped>
+.page-container {
+	height: 100vh;
+	width: 100%;
+	padding: 2rem;
+	background: var(--background-color);
+	overflow-y: auto;
+}
+
 .version-more-container {
-	padding: 1.5rem;
-	height: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
-	gap: 1.5rem;
+	gap: 2rem;
 }
 
 .version-header {
 	background: var(--surface-color);
-	padding: 1.5rem;
+	padding: 2rem;
 	border-radius: 12px;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
@@ -150,6 +187,7 @@ onMounted(() => {
 .version-header h2 {
 	margin: 0 0 1rem 0;
 	color: var(--text-color);
+	font-size: 2rem;
 }
 
 .version-meta {
@@ -159,61 +197,61 @@ onMounted(() => {
 }
 
 .version-type {
-	font-size: 0.9rem;
-	padding: 0.3rem 0.8rem;
-	border-radius: 4px;
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
 	text-transform: capitalize;
-	background: rgba(128, 128, 128, 0.15);
-	color: var(--text-color);
-}
-
-.version-type.release {
-	background: rgba(76, 175, 80, 0.15);
-	color: #4caf50;
-}
-
-.version-type.snapshot {
-	background: rgba(255, 152, 0, 0.15);
-	color: #ff9800;
+	background: rgba(var(--theme-color-rgb), 0.1);
+	color: var(--theme-color);
 }
 
 .version-content {
 	background: var(--surface-color);
 	border-radius: 12px;
-	padding: 1.5rem;
+	padding: 2rem;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-	flex: 1;
+}
+
+.download-options h3 {
+	margin: 0 0 1.5rem 0;
+	font-size: 1.5rem;
+	color: var(--text-color);
 }
 
 .option-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 1rem;
-	margin-top: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 2rem;
 }
 
 .download-option {
-	background: rgba(128, 128, 128, 0.05);
-	padding: 1.5rem;
-	border-radius: 8px;
+	background: rgba(var(--theme-color-rgb), 0.05);
+	padding: 2rem;
+	border-radius: 12px;
 	transition: all 0.3s ease;
 }
 
 .download-option:hover {
-	background: rgba(128, 128, 128, 0.1);
-	transform: translateY(-2px);
+	transform: translateY(-4px);
+	box-shadow: 0 8px 24px rgba(var(--theme-color-rgb), 0.15);
+}
+
+.download-option h4 {
+	margin: 0 0 1rem 0;
+	font-size: 1.2rem;
+	color: var(--text-color);
 }
 
 .download-btn {
 	width: 100%;
-	padding: 0.75rem 1.25rem;
+	padding: 1rem;
 	border: none;
 	border-radius: 8px;
 	background: var(--theme-color);
 	color: white;
+	font-size: 1rem;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	margin-top: 1rem;
 }
 
 .download-btn:hover {
@@ -222,18 +260,19 @@ onMounted(() => {
 }
 
 .back-section {
-	margin-top: auto;
+	margin-top: 2rem;
 }
 
 .back-btn {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
-	padding: 0.75rem 1.25rem;
+	gap: 0.75rem;
+	padding: 1rem 2rem;
 	border: none;
 	border-radius: 8px;
 	background: var(--theme-color);
 	color: white;
+	font-size: 1rem;
 	cursor: pointer;
 	transition: all 0.3s ease;
 }
@@ -246,19 +285,38 @@ onMounted(() => {
 .loading,
 .error {
 	text-align: center;
-	padding: 2rem;
+	padding: 3rem;
 	background: var(--surface-color);
 	border-radius: 12px;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	font-size: 1.2rem;
 }
 
 .error {
-	color: #f44336;
+	color: #ff4d4f;
+	background: rgba(255, 77, 79, 0.1);
+}
+
+/* 过渡动画 */
+.content-transition-enter-active,
+.content-transition-leave-active {
+	transition: all 0.3s ease;
+}
+
+.content-transition-enter-from,
+.content-transition-leave-to {
+	opacity: 0;
+	transform: translateY(20px);
 }
 
 @media (max-width: 768px) {
-	.version-more-container {
+	.page-container {
 		padding: 1rem;
+	}
+
+	.version-header,
+	.version-content {
+		padding: 1.5rem;
 	}
 
 	.option-grid {
