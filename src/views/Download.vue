@@ -3,73 +3,123 @@
 		<div class="download-container">
 			<!-- 左侧版本切换侧边栏 -->
 			<nav class="version-sidebar">
-				<button
-					v-for="(count, type) in versionCounts"
-					:key="type"
-					class="version-nav-btn"
-					:class="{ active: currentCategory === type }"
-					@click="handleCategoryChange(type)"
-					:disabled="isAnimating"
-				>
-					<div class="btn-content">
-						<div class="icon-label">
-							<!-- 正式版图标 -->
-							<svg
-								v-if="type === 'release'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12m0-2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"
-								/>
-							</svg>
-							<!-- 预览版图标 -->
-							<svg
-								v-else-if="type === 'snapshot'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M9 16.42v3.049l3-1.8l3 1.8v-3.05A8 8 0 0 1 12 17a8 8 0 0 1-3-.581M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12"
-								/>
-							</svg>
-							<!-- 远古版图标 -->
-							<svg
-								v-else-if="type === 'old_alpha'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M20 3.107a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1zm-8.811 10.158L5 14.355v4.752h7.218zM19 5.107h-7.219l2.468 14H19zm-9.25 0H5v7.218l5.842-1.03z"
-								/>
-							</svg>
-							<!-- 愚人节版图标 -->
-							<svg
-								v-else-if="type === 'april_fools'"
-								class="nav-icon"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-							>
-								<path
-									fill="currentColor"
-									d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-4-7h8a4 4 0 0 1-8 0m0-2a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
-								/>
-							</svg>
-							<span class="version-label">{{ getTabName(type) }}</span>
+				<div class="version-categories">
+					<button
+						v-for="(count, type) in versionCounts"
+						:key="type"
+						class="version-nav-btn"
+						:class="{ active: currentCategory === type }"
+						@click="handleCategoryChange(type)"
+						:disabled="isAnimating"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<!-- 正式版图标 -->
+								<svg
+									v-if="type === 'release'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12m0-2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"
+									/>
+								</svg>
+								<!-- 预览版图标 -->
+								<svg
+									v-else-if="type === 'snapshot'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M17 15.245v6.872a.5.5 0 0 1-.757.429L12 20l-4.243 2.546a.5.5 0 0 1-.757-.43v-6.87a8 8 0 1 1 10 0M9 16.42v3.049l3-1.8l3 1.8v-3.05A8 8 0 0 1 12 17a8 8 0 0 1-3-.581M12 15a6 6 0 1 0 0-12a6 6 0 0 0 0 12"
+									/>
+								</svg>
+								<!-- 远古版图标 -->
+								<svg
+									v-else-if="type === 'old_alpha'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M20 3.107a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1zm-8.811 10.158L5 14.355v4.752h7.218zM19 5.107h-7.219l2.468 14H19zm-9.25 0H5v7.218l5.842-1.03z"
+									/>
+								</svg>
+								<!-- 愚人节版本图标 -->
+								<svg
+									v-else-if="type === 'april_fools'"
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-4-7h8a4 4 0 0 1-8 0m0-2a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
+									/>
+								</svg>
+								<span class="version-label">{{ getTabName(type) }}</span>
+							</div>
+							<span class="version-count">{{ count }}</span>
 						</div>
-						<span class="version-count">{{ count }}</span>
-					</div>
-				</button>
+					</button>
+				</div>
+
+				<!-- 添加 MOD 和整合包按钮 -->
+				<div class="additional-options">
+					<button
+						class="version-nav-btn"
+						:class="{ active: currentCategory === 'mods' }"
+						@click="handleCategoryChange('mods')"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<svg
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18c-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18c.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9M12 4.15L6.04 7.5L12 10.85l5.96-3.35L12 4.15M5 15.91l6 3.38v-6.71L5 9.21v6.7m14 0v-6.7l-6 3.37v6.71l6-3.38Z"
+									/>
+								</svg>
+								<span class="version-label">MOD</span>
+							</div>
+						</div>
+					</button>
+					<button
+						class="version-nav-btn"
+						:class="{ active: currentCategory === 'modpacks' }"
+						@click="handleCategoryChange('modpacks')"
+					>
+						<div class="btn-content">
+							<div class="icon-label">
+								<svg
+									class="nav-icon"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="m10.414 3l2 2H21a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM18 18h-4v-3h2v-2h-2v-2h2V9h-2V7h-2.414l-2-2H4v14h16V7h-4v2h2v2h-2v2h2z"
+									/>
+								</svg>
+								<span class="version-label">整合包</span>
+							</div>
+						</div>
+					</button>
+				</div>
 			</nav>
 
 			<!-- 主内容区域 -->
@@ -80,7 +130,7 @@
 						<input
 							v-model="searchQuery"
 							type="text"
-							placeholder="搜索版本..."
+							:placeholder="`搜索${currentCategory === 'mods' ? 'MOD' : currentCategory === 'modpacks' ? '整合包' : '版本'}...`"
 							class="search-input"
 						/>
 					</div>
@@ -88,6 +138,23 @@
 
 				<!-- 版本列表 -->
 				<div class="version-list-container">
+					<div class="scroll-buttons">
+						<button class="scroll-button refresh" @click="handleRefresh" title="刷新">
+							<svg viewBox="0 0 24 24">
+								<path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"/>
+							</svg>
+						</button>
+						<button 
+							v-show="showTopButton" 
+							class="action-btn to-top" 
+							@click="scrollToTop" 
+							title="返回顶部"
+						>
+							<svg width="24" height="24" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M3 3h18v2H3zm5 8v10H6V11H3l4-4l4 4zm10 0v10h-2V11h-3l4-4l4 4z"/>
+							</svg>
+						</button>
+					</div>
 					<div v-if="loading" class="loading-container">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -121,11 +188,11 @@
 								/>
 							</path>
 						</svg>
-						<span class="loading-text">正在加载版本列表...</span>
+						<span class="loading-text">{{ getLoadingText }}</span>
 					</div>
 					<div v-else-if="error" class="error">{{ error }}</div>
 					<div v-else-if="filteredVersions.length === 0" class="no-results">
-						没有找到匹配的版本
+						{{ getNoResultsText }}
 					</div>
 					<div v-else class="version-list">
 						<div
@@ -136,13 +203,101 @@
 							:style="{ '--index': index }"
 							@click="handleVersionClick(version)"
 						>
-							<div class="version-id">{{ version.id }}</div>
-							<div class="version-info">
-								<span class="version-type">{{
-									getVersionTypeName(version.type)
-								}}</span>
-								<span class="version-date">{{ version.releaseTime }}</span>
+							<div class="version-info-container">
+								<div class="version-left">
+									<template v-if="currentCategory === 'mods'">
+										<img
+											:src="getModIcon(version).src"
+											@error="getModIcon(version).error"
+											:alt="version.title"
+											class="version-icon mod-icon"
+										/>
+										<div class="version-id">{{ version.title }}</div>
+									</template>
+									<template v-else-if="currentCategory === 'modpacks'">
+										<img
+											:src="getModIcon(version).src"
+											@error="getModIcon(version).error"
+											:alt="version.title"
+											class="version-icon mod-icon"
+										/>
+										<div class="version-id">{{ version.title }}</div>
+									</template>
+									<template v-else>
+										<img
+											:src="getVersionIcon(version)"
+											:alt="version.type"
+											class="version-icon"
+										/>
+										<div class="version-id">{{ version.id }}</div>
+									</template>
+								</div>
+								<div class="version-center">
+									<span v-if="currentCategory !== 'mods' && currentCategory !== 'modpacks'" class="version-type">
+										{{ getVersionTypeName(version.type) }}
+									</span>
+								</div>
+								<div class="version-right">
+									<template v-if="currentCategory === 'mods' || currentCategory === 'modpacks'">
+										最后更新时间: {{ version.releaseTime }}
+									</template>
+									<template v-else>
+										发布时间: {{ version.releaseTime }}
+									</template>
+								</div>
 							</div>
+						</div>
+					</div>
+					
+					<!-- 修改分页组件 -->
+					<div v-if="totalPages > 1" class="pagination-container">
+						<div class="pagination">
+						<button 
+							class="page-btn" 
+							:disabled="currentPage === 1"
+							@click="handlePageChange(currentPage - 1)"
+						>
+							<svg class="page-icon" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/>
+							</svg>
+						</button>
+						
+						<button
+							v-for="page in pageNumbers"
+							:key="page"
+							class="page-btn"
+							:class="{ active: currentPage === page }"
+							@click="handlePageChange(page)"
+						>
+							<span>{{ page }}</span>
+						</button>
+						
+						<button 
+							class="page-btn"
+							:disabled="currentPage === totalPages"
+							@click="handlePageChange(currentPage + 1)"
+						>
+							<svg class="page-icon" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6L8.59 7.41L13.17 12z"/>
+							</svg>
+						</button>
+						</div>
+						<div class="pagination-actions">
+							<button class="action-btn refresh" @click="handleRefresh" title="刷新">
+								<svg viewBox="0 0 24 24">
+									<path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"/>
+								</svg>
+							</button>
+							<button 
+								v-show="showTopButton" 
+								class="action-btn to-top" 
+								@click="scrollToTop" 
+								title="返回顶部"
+							>
+								<svg width="24" height="24" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M3 3h18v2H3zm5 8v10H6V11H3l4-4l4 4zm10 0v10h-2V11h-3l4-4l4 4z"/>
+								</svg>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -174,6 +329,8 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	border-right: 1px solid rgba(128, 128, 128, 0.1);
 	box-shadow: 4px 0 16px rgba(0, 0, 0, 0.05);
 	padding: 1rem 0;
+	position: relative;
+	height: 100%;
 }
 
 .main-content {
@@ -183,6 +340,8 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	padding: 2rem;
 	gap: 1rem;
 	background: var(--background-color);
+	height: 100vh;
+	overflow: hidden;
 }
 
 .search-bar {
@@ -211,20 +370,16 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .version-list-container {
-	flex: 1;
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 200px);
 	overflow-y: auto;
-	padding: 1rem;
-	height: calc(100vh - 160px);
 	position: relative;
 }
 
 .version-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.75rem;
-	padding: 0.5rem;
-	position: relative;
-	min-height: 200px;
+	flex: 1;
+	padding: 1rem;
 }
 
 .version-item {
@@ -282,7 +437,7 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	font-size: 1.1rem;
 	font-weight: 500;
 	color: var(--theme-color);
-	min-width: 100px;
+	min-width: 80px;
 	transition: transform 0.3s ease;
 }
 
@@ -309,6 +464,7 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	border-radius: 8px;
 	font-size: 0.9rem;
 	transition: background-color 0.3s ease;
+	white-space: nowrap;
 }
 
 .version-item.selected .version-type {
@@ -610,10 +766,254 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 	margin: 2rem;
 	animation: fadeIn 0.3s ease;
 }
+
+.version-sidebar {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.version-categories {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	flex: 1;
+}
+
+.additional-options {
+	position: absolute;
+	bottom: 120px;  /* 调整这个值来控制距离底部的距离 */
+	left: 0;
+	right: 0;
+	padding-top: 1rem;
+	border-top: 1px solid rgba(128, 128, 128, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	background: var(--surface-color);
+}
+
+.version-info-container {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex: 1;
+	justify-content: space-between;
+}
+
+.version-left {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	min-width: 200px;
+}
+
+.version-center {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.version-right {
+	min-width: 240px;
+	text-align: right;
+	color: var(--secondary-text);
+	font-size: 0.9rem;
+	white-space: nowrap;
+}
+
+.version-icon {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	image-rendering: pixelated;
+}
+
+.mod-icon {
+	border-radius: 6px;
+	background: var(--background-color);
+	padding: 2px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease;
+}
+
+.version-item:hover .mod-icon {
+	transform: scale(1.1);
+	box-shadow: 0 4px 8px rgba(var(--theme-color-rgb), 0.2);
+}
+
+.version-item.selected .mod-icon {
+	transform: scale(1.15);
+	box-shadow: 0 6px 12px rgba(var(--theme-color-rgb), 0.3);
+}
+
+/* 修改分页相关样式 */
+.pagination-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 2rem;
+	padding: 1rem;
+}
+
+.pagination {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 auto;
+}
+
+.pagination-actions {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.page-btn {
+	min-width: 48px;
+	height: 48px;
+	padding: 0 1rem;
+	border: none;
+	border-radius: 8px;
+	background: var(--surface-color);
+	color: var(--text-color);
+	font-size: 1.1rem;
+	font-weight: 500;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s $animation-curve;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(var(--theme-color-rgb), 0.1);
+}
+
+.page-btn::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: var(--theme-color);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	z-index: 0;
+}
+
+.page-btn:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(var(--theme-color-rgb), 0.2);
+}
+
+.page-btn:hover:not(:disabled)::before {
+	opacity: 0.1;
+}
+
+.page-btn.active {
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 4px 16px rgba(var(--theme-color-rgb), 0.3);
+}
+
+.page-btn.active::before {
+	opacity: 1;
+}
+
+.page-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.page-icon {
+	width: 32px;
+	height: 32px;
+	position: relative;
+	z-index: 1;
+}
+
+.action-btn {
+	width: 48px;
+	height: 48px;
+	border: none;
+	border-radius: 8px;
+	background: var(--surface-color);
+	color: var(--text-color);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s $animation-curve;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(var(--theme-color-rgb), 0.1);
+}
+
+.action-btn::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: var(--theme-color);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	z-index: 0;
+}
+
+.action-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(var(--theme-color-rgb), 0.2);
+}
+
+.action-btn:hover::before {
+	opacity: 0.1;
+}
+
+.action-btn svg {
+	width: 32px;
+	height: 32px;
+	position: relative;
+	z-index: 1;
+	transition: transform 0.3s $animation-curve;
+}
+
+.action-btn:hover svg {
+	transform: scale(1.2);
+}
+
+/* 删除原有的滚动按钮样式 */
+.scroll-buttons {
+	display: none;
+}
+
+.page-btn span {
+	position: relative;
+	z-index: 1;
+}
+
+/* 添加点击动画样式 */
+.action-btn.to-top.clicked {
+	animation: topButtonClick 0.5s $animation-curve;
+}
+
+@keyframes topButtonClick {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(0.9) translateY(2px);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
 </style>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -633,13 +1033,26 @@ const versions = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
-// 获取版本类型的显示名称
+// 添加 MOD 和整合包相关的状态
+const modCount = ref(0);
+const modpackCount = ref(0);
+const mods = ref([]);
+const modpacks = ref([]);
+
+// 在 script setup 部分添加分页相关的状态
+const currentPage = ref(1);
+const pageSize = 20;
+const totalPages = ref(1);
+
+// 修改版本类型的显示名称函数
 const getTabName = (type) => {
 	const names = {
 		release: '正式版',
 		snapshot: '快照版',
 		old_alpha: '远古版',
 		april_fools: '愚人节版本',
+		mods: 'MOD',
+		modpacks: '整合包'
 	};
 	return names[type];
 };
@@ -653,7 +1066,7 @@ const getVersionTypeName = (type) => {
 		release_candidate: '候选版',
 		old_alpha: '远古版本(Alpha)',
 		old_beta: '远古版本(Beta)',
-		april_fools: '愚人节版本',
+		april_fools: '愚人节版本'
 	};
 	return typeNames[type] || type;
 };
@@ -694,12 +1107,35 @@ const isVersionMatch = (version) => {
 	}
 };
 
-// 过滤版本列表
+// 修改过滤版本列表的计算属性
 const filteredVersions = computed(() => {
-	const filtered = versions.value
-		.filter((version) => isVersionMatch(version))
-		.filter((version) => version.id.toLowerCase().includes(searchQuery.value.toLowerCase()));
-	return filtered;
+	let items = [];
+
+	if (currentCategory.value === 'mods') {
+		items = mods.value;
+	} else if (currentCategory.value === 'modpacks') {
+		items = modpacks.value;
+	} else {
+		// 先过滤符合条件的版本
+		items = versions.value.filter((version) => isVersionMatch(version));
+		
+		// 如果有搜索词，进行搜索过滤
+		if (searchQuery.value) {
+			items = items.filter(item => 
+				item.id.toLowerCase().includes(searchQuery.value.toLowerCase())
+			);
+		}
+
+		// 计算总页数
+		totalPages.value = Math.ceil(items.length / pageSize);
+
+		// 分页处理
+		const start = (currentPage.value - 1) * pageSize;
+		const end = start + pageSize;
+		items = items.slice(start, end);
+	}
+
+	return items;
 });
 
 // 获取版本列表
@@ -770,19 +1206,57 @@ const updateVersionCounts = () => {
 // 添加动画状态控制
 const isAnimating = ref(false);
 
-// 修改版本切换处理
+// 修改版本切换处理函数
 const handleCategoryChange = async (type) => {
-	if (currentCategory.value === type) return;
-	currentCategory.value = type;
+	if (isAnimating.value) return;
+	isAnimating.value = true;
 
-	// 重置滚动位置
-	const container = document.querySelector('.version-list-container');
-	if (container) {
-		container.scrollTop = 0;
+	// 如果点击的是当前分类，则刷新数据
+	if (currentCategory.value === type) {
+		loading.value = true;
+		if (type === 'mods') {
+			await fetchMods(currentPage.value);
+		} else if (type === 'modpacks') {
+			await fetchModpacks(currentPage.value);
+		} else {
+			await fetchVersions();
+		}
+		loading.value = false;
+	} else {
+		// 切换分类
+		currentCategory.value = type;
+		currentPage.value = 1; // 重置页码
+
+		// 重置滚动位置
+		const container = document.querySelector('.version-list-container');
+		if (container) {
+			container.scrollTop = 0;
+		}
+
+		// 根据类型加载不同的数据
+		loading.value = true;
+		if (type === 'mods') {
+			await fetchMods(1);
+		} else if (type === 'modpacks') {
+			await fetchModpacks(1);
+		} else {
+			await fetchVersions();
+		}
+		loading.value = false;
 	}
 
 	// 触发重新动画
-	versions.value = [...versions.value];
+	if (type === 'mods') {
+		versions.value = [...mods.value];
+	} else if (type === 'modpacks') {
+		versions.value = [...modpacks.value];
+	} else {
+		versions.value = [...versions.value];
+	}
+
+	setTimeout(() => {
+		isAnimating.value = false;
+	}, 500); // 动画持续时间后解锁
 };
 
 // 添加选中状态
@@ -798,13 +1272,244 @@ const handleVersionClick = (version) => {
 		router.push({
 			name: 'VersionMore',
 			params: {
-				version: version.id,
-			},
+				version: version.id
+			}
 		});
 	} catch (error) {
 		console.error('Navigation error:', error);
 	}
 };
+
+// 添加获取 MOD 列表的函数
+const fetchMods = async (page = 1) => {
+	try {
+		loading.value = true;
+		const offset = (page - 1) * pageSize;
+		const response = await fetch(`https://api.modrinth.com/v2/search?limit=${pageSize}&offset=${offset}&index=downloads`);
+		if (!response.ok) throw new Error('Failed to fetch mods');
+
+		const data = await response.json();
+		mods.value = data.hits.map(mod => ({
+			id: mod.project_id,
+			title: mod.title,
+			description: mod.description,
+			downloads: mod.downloads,
+			author: mod.author,
+			versions: mod.versions,
+			icon_url: mod.icon_url,
+			releaseTime: new Date(mod.date_modified).toLocaleString('zh-CN', { hour12: false })
+		}));
+		modCount.value = data.total_hits;
+		totalPages.value = Math.ceil(data.total_hits / pageSize);
+	} catch (err) {
+		error.value = '获取MOD列表失败: ' + err.message;
+		console.error('Error fetching mods:', err);
+	} finally {
+		loading.value = false;
+	}
+};
+
+// 修改整合包数据获取函数
+const fetchModpacks = async (page = 1) => {
+	try {
+		loading.value = true;
+		const offset = (page - 1) * pageSize;
+		const response = await fetch(`https://api.modrinth.com/v2/search?limit=${pageSize}&offset=${offset}&facets=[["project_type:modpack"]]`);
+		if (!response.ok) throw new Error('Failed to fetch modpacks');
+
+		const data = await response.json();
+		modpacks.value = data.hits.map(pack => ({
+			id: pack.project_id,
+			title: pack.title,
+			description: pack.description,
+			downloads: pack.downloads,
+			author: pack.author,
+			versions: pack.versions,
+			icon_url: pack.icon_url,
+			releaseTime: new Date(pack.date_modified).toLocaleString('zh-CN', { hour12: false })
+		}));
+		modpackCount.value = data.total_hits;
+		totalPages.value = Math.ceil(data.total_hits / pageSize);
+	} catch (err) {
+		error.value = '获取整合包列表失败: ' + err.message;
+		console.error('Error fetching modpacks:', err);
+	} finally {
+		loading.value = false;
+	}
+};
+
+// 添加加载文本的计算属性
+const getLoadingText = computed(() => {
+	switch (currentCategory.value) {
+		case 'mods':
+			return '正在加载MOD列表...';
+		case 'modpacks':
+			return '正在获取整合包列表...';
+		default:
+			return '正在加载版本列表...';
+	}
+});
+
+// 添加无结果文本的计算属性
+const getNoResultsText = computed(() => {
+	switch (currentCategory.value) {
+		case 'mods':
+			return '没有找到匹配的MOD';
+		case 'modpacks':
+			return '没有找到匹配的整合包';
+		default:
+			return '没有找到匹配的版本';
+	}
+});
+
+// 在 script setup 部分添加图标映射
+const getVersionIcon = (version) => {
+	const releaseDate = new Date(version.releaseTime);
+	const isAprilFools = releaseDate.getMonth() === 3 && releaseDate.getDate() === 1;
+
+	if (isAprilFools) {
+		return '/public/IMG/Icons/GoldBlock.png';
+	}
+
+	switch (version.type) {
+		case 'release':
+			return '/public/IMG/Icons/Grass.png';
+		case 'snapshot':
+		case 'pre_release':
+		case 'release_candidate':
+			return '/public/IMG/Icons/GrassPath.png';
+		case 'old_alpha':
+		case 'old_beta':
+			return '/public/IMG/Icons/CobbleStone.png';
+		default:
+			return '/public/IMG/Icons/Grass.png';
+	}
+};
+
+// 在 script setup 部分添加图标处理函数
+const getModIcon = (mod) => {
+	if (mod.icon_url) {
+		return {
+			src: mod.icon_url,
+			error: (e) => {
+				e.target.src = '/public/IMG/Icons/NoIcon.png';
+			}
+		};
+	}
+	return {
+		src: '/public/IMG/Icons/NoIcon.png',
+		error: null
+	};
+};
+
+// 添加页面切换处理函数
+const handlePageChange = async (page) => {
+	if (page < 1 || page > totalPages.value) return;
+	
+	// 滚动到顶部
+	const container = document.querySelector('.version-list-container');
+	if (container) {
+		container.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+	}
+
+	// 等待滚动完成后再加载新数据
+	await new Promise(resolve => setTimeout(resolve, 300));
+
+	currentPage.value = page;
+	if (currentCategory.value === 'mods') {
+		await fetchMods(page);
+	} else if (currentCategory.value === 'modpacks') {
+		await fetchModpacks(page);
+	}
+	// MC版本列表不需要重新加载，因为数据已经在本地
+};
+
+// 添加获取分页数组的计算属性
+const pageNumbers = computed(() => {
+	const current = currentPage.value;
+	const total = totalPages.value;
+	const pages = [];
+
+	if (total <= 5) {
+		for (let i = 1; i <= total; i++) {
+			pages.push(i);
+		}
+	} else if (current <= 3) {
+		pages.push(1, 2, 3, 4, 5);
+	} else if (current >= total - 2) {
+		for (let i = total - 4; i <= total; i++) {
+			pages.push(i);
+		}
+	} else {
+		pages.push(current - 2, current - 1, current, current + 1, current + 2);
+	}
+
+	return pages;
+});
+
+// 添加显示返回顶部按钮的状态
+const showTopButton = ref(false);
+
+// 添加滚动处理函数
+const handleScroll = (e) => {
+	showTopButton.value = e.target.scrollTop > 300;
+};
+
+// 添加刷新处理函数
+const handleRefresh = async () => {
+	const container = document.querySelector('.version-list-container');
+	if (container) {
+		container.scrollTop = 0;
+	}
+
+	loading.value = true;
+	if (currentCategory.value === 'mods') {
+		await fetchMods(currentPage.value);
+	} else if (currentCategory.value === 'modpacks') {
+		await fetchModpacks(currentPage.value);
+	} else {
+		await fetchVersions();
+	}
+};
+
+// 修改返回顶部函数
+const scrollToTop = () => {
+	const container = document.querySelector('.version-list-container');
+	if (container) {
+		// 添加动画类
+		const button = document.querySelector('.action-btn.to-top');
+		if (button) {
+			button.classList.add('clicked');
+			setTimeout(() => {
+				button.classList.remove('clicked');
+			}, 500); // 动画持续时间后移除类
+		}
+		
+		// 平滑滚动到顶部
+		container.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+	}
+};
+
+// 添加生命周期钩子
+onMounted(() => {
+	const container = document.querySelector('.version-list-container');
+	if (container) {
+		container.addEventListener('scroll', handleScroll);
+	}
+});
+
+onUnmounted(() => {
+	const container = document.querySelector('.version-list-container');
+	if (container) {
+		container.removeEventListener('scroll', handleScroll);
+	}
+});
 
 // 初始化
 fetchVersions();
