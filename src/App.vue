@@ -172,6 +172,11 @@ const homeSettings = {
 
 // 提供给子组件
 provide('homeSettings', homeSettings);
+
+// 禁用右键
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+})
 </script>
 
 <style>
