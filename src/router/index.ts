@@ -3,7 +3,6 @@ import Home from '../views/Home.vue';
 import Download from '../views/Download.vue';
 import Settings from '../views/Settings.vue';
 import VersionMore from '../views/download/VersionDetail.vue';
-import VersionList from '../views/download/VersionList.vue';
 
 const router = createRouter({
 	history: createWebHistory(),
@@ -19,12 +18,7 @@ const router = createRouter({
 			component: Download,
 			children: [
 				{
-					path: '',
-					name: 'VersionList',
-					component: VersionList,
-				},
-				{
-					path: ':id/more',
+					path: ':version/more',
 					name: 'VersionMore',
 					component: VersionMore,
 				},
