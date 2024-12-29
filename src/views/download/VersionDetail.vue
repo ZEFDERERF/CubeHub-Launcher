@@ -54,13 +54,13 @@ import { useRoute, useRouter } from 'vue-router';
 const props = defineProps({
 	version: {
 		type: String,
-		required: true,
-	},
+		required: true
+	}
 });
 
 const route = useRoute();
 const router = useRouter();
-const versionId = ref(props.version);
+const versionId = ref(route.params.version);
 const versionData = ref(null);
 const loading = ref(true);
 const error = ref(null);
@@ -70,7 +70,7 @@ console.log('VersionDetail mounted with route:', {
 	path: route.path,
 	params: route.params,
 	name: route.name,
-	fullPath: route.fullPath,
+	fullPath: route.fullPath
 });
 
 const getVersionTypeName = (type) => {
@@ -148,16 +148,13 @@ onMounted(() => {
 });
 
 // 监听 props 变化
-watch(
-	() => props.version,
-	(newVersion) => {
-		console.log('Version prop changed:', newVersion);
-		if (newVersion) {
-			versionId.value = newVersion;
-			fetchVersionData();
-		}
+watch(() => props.version, (newVersion) => {
+	console.log('Version prop changed:', newVersion);
+	if (newVersion) {
+		versionId.value = newVersion;
+		fetchVersionData();
 	}
-);
+});
 </script>
 
 <style scoped>

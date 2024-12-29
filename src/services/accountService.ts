@@ -89,14 +89,11 @@ class AccountService {
 				}, 100);
 
 				// 5分钟超时
-				setTimeout(
-					() => {
-						clearInterval(checkRedirect);
-						authWindow.close();
-						reject(new Error('登录超时'));
-					},
-					5 * 60 * 1000
-				);
+				setTimeout(() => {
+					clearInterval(checkRedirect);
+					authWindow.close();
+					reject(new Error('登录超时'));
+				}, 5 * 60 * 1000);
 			});
 
 			console.log('获取到授权码:', code);
@@ -346,24 +343,60 @@ class AccountService {
 		return canvas.toDataURL('image/png');
 	}
 
+	private getRandomSkin(): { skinPath: string; avatar: string } {
+		const skins = ['alex', 'steve'];
+		const randomSkin = skins[Math.floor(Math.random() * skins.length)];
+		return {
+			skinPath: `/public/IMG/Skins/${randomSkin}.png`,
+			avatar: `/public/IMG/Skins/${randomSkin}.png`
+		};
+	}
+
 	async loginOffline(username: string): Promise<void> {
+		if (!username || username.trim().length === 0) {
+			throw new Error('请输入游戏名称');
+		}
+		
+		const trimmedUsername = username.trim();
+		if (trimmedUsername.length > 16) {
+			throw new Error('游戏名称不能超过16个字符');
+		}
+		
+		// 检查用户名是否已存在
+		const existingAccount = this.accounts.value.find(
+			(acc) => acc.type === 'offline' && acc.username.toLowerCase() === trimmedUsername.toLowerCase()
+		);
+		
+		if (existingAccount) {
+			// 如果账号已存在，直接切换到该账号
+			this.currentAccount.value = existingAccount;
+			return;
+		}
+		
 		try {
-			const { skinPath, headImage } = await getRandomSkin();
-
-			const account: Account = {
-				id: crypto.randomUUID(),
-				type: 'offline',
-				username,
-				avatar: headImage,
-				skinPath,
-				createdAt: new Date().toISOString(),
+			// 获取随机皮肤
+			const { skinPath } = this.getRandomSkin();
+			
+			// 提取皮肤头部作为头像
+			const avatar = await this.extractSkinHead(skinPath);
+			
+			// 创建新的离线账号
+			const offlineAccount = {
+				id: `offline-${Date.now()}`,
+				username: trimmedUsername,
+				type: 'offline' as const,
+				avatar: avatar,
+				skinPath: skinPath,
+				createdAt: new Date().toISOString()
 			};
-
-			this.accounts.value.push(account);
-			this.currentAccount.value = account;
+			
+			this.accounts.value.push(offlineAccount);
+			this.currentAccount.value = offlineAccount;
+			
+			// 保存账号信息
 			this.saveAccounts();
 		} catch (error) {
-			console.error('离线登录失败:', error);
+			console.error('创建离线账号失败:', error);
 			throw error;
 		}
 	}

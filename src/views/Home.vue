@@ -135,7 +135,7 @@
 		</div>
 
 		<!-- 登录相关的模态框 -->
-		<Modal v-if="showLoginModal" @close="closeLoginModal">
+		<Modal v-if="showLoginModal" @close="closeLoginModal" class="login-modal">
 			<LoginSelector v-if="!loginType" @select="handleLoginSelect" />
 			<OfflineLoginForm
 				v-else-if="loginType === 'offline'"
@@ -489,16 +489,22 @@
 
 /* 登录模态框样式 */
 .login-modal {
-	padding: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
+	overflow: hidden;
+}
+
+.login-modal :deep(.modal-content) {
+	overflow: hidden;
 }
 
 .login-options {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+	overflow: hidden;
+}
+
+.login-options::-webkit-scrollbar {
+	display: none;
 }
 
 .microsoft-login,
@@ -886,6 +892,10 @@
 .home-content::-webkit-scrollbar-thumb:hover {
 	background: rgba(var(--theme-color-rgb), 0.3);
 }
+
+.version-list-container::-webkit-scrollbar {
+	display: none;
+}
 </style>
 
 <script setup>
@@ -945,10 +955,12 @@ const confirmDelete = async () => {
 
 	try {
 		await accountService.removeAccount(accountToDelete.value);
+		notification?.success(`已删除账户：${accountToDelete.value.username}`);
 		if (accounts.value.length === 0) {
 			showAccountMenu.value = false;
 		}
 	} catch (error) {
+		notification?.error('删除账号失败');
 		console.error('删除账号失败:', error);
 	} finally {
 		showDeleteConfirm.value = false;
@@ -980,9 +992,14 @@ const handleLoginSelect = (type) => {
 const handleOfflineLogin = async (username) => {
 	console.log('处理离线登录:', username);
 	try {
-		await accountService.loginOffline(username);
+		if (!username || username.trim().length === 0) {
+			throw new Error('请输入游戏名称');
+		}
+		await accountService.loginOffline(username.trim());
+		notification?.success(`已添加账户：${username.trim()}`);
 		closeLoginModal();
 	} catch (error) {
+		notification?.error('登录失败');
 		console.error('离线登录失败:', error);
 	}
 };
@@ -1023,4 +1040,24 @@ onMounted(() => {
 		}
 	});
 });
+
+const notification = inject('notification');
+
+const handleAccountAdd = async () => {
+	try {
+		// 添加账号的逻辑
+		notification?.success('账号添加成功');
+	} catch (error) {
+		notification?.error('账号添加失败');
+	}
+};
+
+const handleAccountDelete = async () => {
+	try {
+		// 删除账号的逻辑
+		notification?.success('账号删除成功');
+	} catch (error) {
+		notification?.error('账号删除失败');
+	}
+};
 </script>

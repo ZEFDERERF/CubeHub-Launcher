@@ -89,6 +89,7 @@ const handleSubmit = () => {
 	border-radius: 12px;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	animation: formIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	overflow: hidden;
 }
 
 @keyframes formIn {
@@ -107,6 +108,7 @@ const handleSubmit = () => {
 	align-items: center;
 	gap: 1rem;
 	margin-bottom: 2rem;
+	overflow: hidden;
 }
 
 .back-btn {
@@ -141,6 +143,7 @@ h2 {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
+	overflow: hidden;
 }
 
 .form-group {

@@ -9,12 +9,16 @@
 				</transition>
 			</router-view>
 		</div>
+		<ContextMenu />
+		<Notification ref="notificationRef" />
 	</div>
 </template>
 
 <script setup>
 import { ref, provide } from 'vue';
 import TitleBar from './components/TitleBar.vue';
+import ContextMenu from './components/ContextMenu.vue';
+import Notification from './components/Notification.vue';
 
 const THEME_COLORS = [
 	// 绿色系
@@ -172,9 +176,30 @@ const homeSettings = {
 
 // 提供给子组件
 provide('homeSettings', homeSettings);
+
+const notificationRef = ref();
+
+// 提供通知方法给所有子组件
+provide('notification', {
+	success: (message) => {
+		if (notificationRef.value) {
+			notificationRef.value.show(message, 'success');
+		}
+	},
+	error: (message) => {
+		if (notificationRef.value) {
+			notificationRef.value.show(message, 'error');
+		}
+	}
+});
 </script>
 
 <style>
+@font-face {
+	font-family: 'MinecraftFont';
+	src: url('./assets/Fonts/Font.ttf') format('truetype');
+}
+
 :root {
 	--theme-color: #4caf50;
 	--theme-color-light: #81c784;
@@ -184,6 +209,7 @@ provide('homeSettings', homeSettings);
 	--text-color: #ffffff;
 	--secondary-text: rgba(255, 255, 255, 0.7);
 	--window-border-radius: 8px;
+	font-family: 'MinecraftFont', system-ui, -apple-system, sans-serif;
 }
 
 /* 亮色主题 */
@@ -223,6 +249,34 @@ body {
 	height: 100vh;
 	margin: 0;
 	padding: 0;
+}
+
+/* 允许文本选择但禁用默认菜单 */
+* {
+	-webkit-user-select: text;
+	user-select: text;
+	-webkit-touch-callout: none;
+}
+
+/* 自定义文字选择样式 */
+::selection {
+	background-color: rgba(var(--theme-color-rgb), 0.3);
+	color: var(--text-color);
+}
+
+::-moz-selection {
+	background-color: rgba(var(--theme-color-rgb), 0.3);
+	color: var(--text-color);
+}
+
+/* 移除移动端点击高亮 */
+* {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* 禁用默认菜单 */
+:root {
+	-webkit-touch-callout: none;
 }
 
 .app-container {
@@ -335,5 +389,13 @@ body {
 
 .skin-hat {
 	animation: avatarFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 只允许输入框可以选择文字 */
+input, textarea {
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
 }
 </style>

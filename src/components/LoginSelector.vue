@@ -39,6 +39,7 @@
 .login-selector {
 	padding: 2rem;
 	animation: selectorIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	overflow: hidden;
 }
 
 @keyframes selectorIn {
@@ -63,6 +64,7 @@ h2 {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+	overflow: hidden;
 }
 
 .login-option {

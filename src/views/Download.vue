@@ -144,10 +144,10 @@
 								<path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"/>
 							</svg>
 						</button>
-						<button 
-							v-show="showTopButton" 
-							class="action-btn to-top" 
-							@click="scrollToTop" 
+						<button
+							v-show="showTopButton"
+							class="action-btn to-top"
+							@click="scrollToTop"
 							title="返回顶部"
 						>
 							<svg width="24" height="24" viewBox="0 0 24 24">
@@ -188,11 +188,11 @@
 								/>
 							</path>
 						</svg>
-						<span class="loading-text">{{ getLoadingText }}</span>
+						<span class="loading-text">{{ currentCategory === 'mods' ? '正在加载MOD列表...' : currentCategory === 'modpacks' ? '正在加载整合包列表...' : '正在加载版本列表...' }}</span>
 					</div>
 					<div v-else-if="error" class="error">{{ error }}</div>
 					<div v-else-if="filteredVersions.length === 0" class="no-results">
-						{{ getNoResultsText }}
+						{{ currentCategory === 'mods' ? '没有找到MOD' : currentCategory === 'modpacks' ? '没有找到整合包' : '没有找到版本' }}
 					</div>
 					<div v-else class="version-list">
 						<div
@@ -201,7 +201,7 @@
 							class="version-item"
 							:class="{ selected: selectedVersion === version.id }"
 							:style="{ '--index': index }"
-							@click="handleVersionClick(version)"
+							@click="handleVersionClick(version, currentCategory)"
 						>
 							<div class="version-info-container">
 								<div class="version-left">
@@ -248,12 +248,23 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- 修改分页组件 -->
-					<div v-if="totalPages > 1" class="pagination-container">
+					<div v-if="!loading && totalPages > 1" class="pagination-container">
 						<div class="pagination">
-						<button 
-							class="page-btn" 
+							<button
+								class="page-btn"
+								:disabled="currentPage === 1"
+								@click="handlePageChange(1)"
+								title="跳转到第一页"
+							>
+								<svg class="page-icon" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59z"/>
+								</svg>
+							</button>
+
+						<button
+							class="page-btn"
 							:disabled="currentPage === 1"
 							@click="handlePageChange(currentPage - 1)"
 						>
@@ -261,7 +272,7 @@
 								<path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/>
 							</svg>
 						</button>
-						
+
 						<button
 							v-for="page in pageNumbers"
 							:key="page"
@@ -271,8 +282,8 @@
 						>
 							<span>{{ page }}</span>
 						</button>
-						
-						<button 
+
+						<button
 							class="page-btn"
 							:disabled="currentPage === totalPages"
 							@click="handlePageChange(currentPage + 1)"
@@ -288,10 +299,10 @@
 									<path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"/>
 								</svg>
 							</button>
-							<button 
-								v-show="showTopButton" 
-								class="action-btn to-top" 
-								@click="scrollToTop" 
+							<button
+								v-show="showTopButton"
+								class="action-btn to-top"
+								@click="scrollToTop"
 								title="返回顶部"
 							>
 								<svg width="24" height="24" viewBox="0 0 24 24">
@@ -870,14 +881,14 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .page-btn {
-	min-width: 48px;
-	height: 48px;
-	padding: 0 1rem;
+	min-width: 52px;
+	height: 52px;
+	padding: 0 1.2rem;
 	border: none;
 	border-radius: 8px;
 	background: var(--surface-color);
 	color: var(--text-color);
-	font-size: 1.1rem;
+	font-size: 1.4rem;
 	font-weight: 500;
 	cursor: pointer;
 	display: flex;
@@ -927,15 +938,15 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .page-icon {
-	width: 32px;
-	height: 32px;
+	width: 40px;
+	height: 40px;
 	position: relative;
 	z-index: 1;
 }
 
 .action-btn {
-	width: 48px;
-	height: 48px;
+	width: 52px;
+	height: 52px;
 	border: none;
 	border-radius: 8px;
 	background: var(--surface-color);
@@ -973,8 +984,8 @@ $animation-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .action-btn svg {
-	width: 32px;
-	height: 32px;
+	width: 40px;
+	height: 40px;
 	position: relative;
 	z-index: 1;
 	transition: transform 0.3s $animation-curve;
@@ -1118,10 +1129,10 @@ const filteredVersions = computed(() => {
 	} else {
 		// 先过滤符合条件的版本
 		items = versions.value.filter((version) => isVersionMatch(version));
-		
+
 		// 如果有搜索词，进行搜索过滤
 		if (searchQuery.value) {
-			items = items.filter(item => 
+			items = items.filter(item =>
 				item.id.toLowerCase().includes(searchQuery.value.toLowerCase())
 			);
 		}
@@ -1263,18 +1274,23 @@ const handleCategoryChange = async (type) => {
 const selectedVersion = ref(null);
 
 // 添加版本点击处理函数
-const handleVersionClick = (version) => {
+const handleVersionClick = (object, currentCategory) => {
 	try {
-		console.log('Clicking version:', version);
-		selectedVersion.value = version.id;
-		console.log('Navigating to version:', version.id);
-
-		router.push({
-			name: 'VersionMore',
-			params: {
-				version: version.id
-			}
-		});
+		// 根据Category类型导航到不同的页面
+		switch (currentCategory) {
+		    case 'mods':
+				router.push({ name: 'ModDetail', params: { id: object.id } });
+				break;
+			case 'modpacks':
+				router.push({ name: 'ModpackDetail', params: { id: object.id } });
+				break;
+			default:
+				router.push({ name: 'VersionDetail', params: { version: object.id } });
+				break;
+		}
+		// Debug日志，以及导航目标
+		console.debug('Info:', object);
+		console.debug(`Navigating to ${currentCategory}Detail page for ${object.id}`);
 	} catch (error) {
 		console.error('Navigation error:', error);
 	}
@@ -1338,30 +1354,6 @@ const fetchModpacks = async (page = 1) => {
 	}
 };
 
-// 添加加载文本的计算属性
-const getLoadingText = computed(() => {
-	switch (currentCategory.value) {
-		case 'mods':
-			return '正在加载MOD列表...';
-		case 'modpacks':
-			return '正在获取整合包列表...';
-		default:
-			return '正在加载版本列表...';
-	}
-});
-
-// 添加无结果文本的计算属性
-const getNoResultsText = computed(() => {
-	switch (currentCategory.value) {
-		case 'mods':
-			return '没有找到匹配的MOD';
-		case 'modpacks':
-			return '没有找到匹配的整合包';
-		default:
-			return '没有找到匹配的版本';
-	}
-});
-
 // 在 script setup 部分添加图标映射
 const getVersionIcon = (version) => {
 	const releaseDate = new Date(version.releaseTime);
@@ -1405,7 +1397,7 @@ const getModIcon = (mod) => {
 // 添加页面切换处理函数
 const handlePageChange = async (page) => {
 	if (page < 1 || page > totalPages.value) return;
-	
+
 	// 滚动到顶部
 	const container = document.querySelector('.version-list-container');
 	if (container) {
@@ -1487,7 +1479,7 @@ const scrollToTop = () => {
 				button.classList.remove('clicked');
 			}, 500); // 动画持续时间后移除类
 		}
-		
+
 		// 平滑滚动到顶部
 		container.scrollTo({
 			top: 0,

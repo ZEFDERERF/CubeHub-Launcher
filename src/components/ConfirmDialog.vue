@@ -67,11 +67,11 @@
 			<p class="message">{{ message }}</p>
 
 			<div v-if="requireInput" class="input-section">
-				<p class="input-desc">请输入 <strong>Delete</strong> 以确认删除</p>
+				<p class="input-desc">请输入 <strong>我确认删除</strong> 以确认删除</p>
 				<input
 					v-model="inputText"
 					type="text"
-					placeholder="Delete"
+					placeholder="请在这里输入正确的文本"
 					:class="{ error: showError }"
 					@input="handleInput"
 				/>
@@ -112,7 +112,7 @@ const showError = ref(false);
 
 const isValid = computed(() => {
 	if (!props.requireInput) return true;
-	return inputText.value === 'Delete';
+	return inputText.value === '我确认删除';
 });
 
 const handleInput = () => {
@@ -135,6 +135,8 @@ const handleConfirm = () => {
 	background: var(--surface-color);
 	border-radius: 12px;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 .dialog-header {
@@ -174,7 +176,7 @@ const handleConfirm = () => {
 }
 
 input {
-	width: 100%;
+	width: 80%;
 	padding: 0.75rem 1rem;
 	border: 1px solid rgba(var(--theme-color-rgb), 0.2);
 	border-radius: 8px;
@@ -183,6 +185,10 @@ input {
 	font-size: 1rem;
 	transition: all 0.3s ease;
 	text-align: center;
+	display: block;
+	margin: 0 auto;
+	user-select: text;
+	-webkit-user-select: text;
 }
 
 input:focus {
